@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardingViewController" customModule="MovieApp" customModuleProvider="target">
+            <connections>
+                <outlet property="navigateNextPageButtonView" destination="KEG-6T-pbb" id="0dt-bQ-xCi"/>
+                <outlet property="onboardingView" destination="duD-o2-EiX" id="v98-Xe-PtS"/>
+                <outlet property="pageControl" destination="kVo-JC-cKc" id="QKb-ob-oTn"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Si2-IU-Eg5" userLabel="Page Control">
+                    <rect key="frame" x="20" y="738" width="353" height="80"/>
+                    <subviews>
+                        <pageControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="kVo-JC-cKc">
+                            <rect key="frame" x="0.0" y="27" width="116" height="26"/>
+                            <color key="pageIndicatorTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="currentPageIndicatorTintColor" red="0.40931015009999999" green="0.68680850940000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </pageControl>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KEG-6T-pbb" userLabel="Next Page">
+                            <rect key="frame" x="293" y="10" width="60" height="60"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="KEG-6T-pbb" secondAttribute="height" multiplier="1:1" id="79h-iF-o2v"/>
+                                <constraint firstAttribute="width" constant="60" id="koi-C9-Zh7"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="KEG-6T-pbb" firstAttribute="centerY" secondItem="Si2-IU-Eg5" secondAttribute="centerY" id="1n3-ed-jvm"/>
+                        <constraint firstItem="kVo-JC-cKc" firstAttribute="centerY" secondItem="Si2-IU-Eg5" secondAttribute="centerY" id="MkZ-iN-FLu"/>
+                        <constraint firstItem="kVo-JC-cKc" firstAttribute="leading" secondItem="Si2-IU-Eg5" secondAttribute="leading" id="o0g-zI-MSG"/>
+                        <constraint firstAttribute="height" constant="80" id="oXL-hX-EMi"/>
+                        <constraint firstAttribute="trailing" secondItem="KEG-6T-pbb" secondAttribute="trailing" id="qOI-Cq-vRf"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="duD-o2-EiX" userLabel="Page View">
+                    <rect key="frame" x="0.0" y="79" width="393" height="639"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Si2-IU-Eg5" secondAttribute="trailing" constant="20" id="1aZ-ug-SjQ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Si2-IU-Eg5" secondAttribute="bottom" id="OwW-Ep-Oye"/>
+                <constraint firstItem="Si2-IU-Eg5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="deQ-x6-lOy"/>
+                <constraint firstItem="Si2-IU-Eg5" firstAttribute="top" secondItem="duD-o2-EiX" secondAttribute="bottom" constant="20" id="hW3-en-W2U"/>
+                <constraint firstItem="duD-o2-EiX" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="pwK-JR-SL1"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="duD-o2-EiX" secondAttribute="trailing" id="rm8-5I-sEq"/>
+                <constraint firstItem="duD-o2-EiX" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="uJI-9P-Etl"/>
+            </constraints>
+            <point key="canvasLocation" x="-637.40458015267177" y="88.732394366197184"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

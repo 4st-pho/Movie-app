@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="LoggedInMiddlewareView" customModule="MovieApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="567"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bb6-lb-m8C">
+                    <rect key="frame" x="0.0" y="178.33333333333331" width="393" height="235.33333333333331"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginRequired" translatesAutoresizingMaskIntoConstraints="NO" id="GWy-Ku-x7k">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="100" id="MRj-RE-h6o"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login required!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdN-w3-Nt2">
+                            <rect key="frame" x="0.0" y="129.99999999999997" width="393" height="19.333333333333343"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkF-rv-cL7">
+                            <rect key="frame" x="136.66666666666666" y="189.33333333333334" width="119.99999999999997" height="46"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="120" id="1Ar-dg-1VF"/>
+                                <constraint firstAttribute="height" constant="46" id="bhF-m0-ks3"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="filled" title="Login"/>
+                            <connections>
+                                <action selector="signInTouchUpInside:" destination="iN0-l3-epB" eventType="touchUpInside" id="DZk-BY-vch"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="GWy-Ku-x7k" firstAttribute="leading" secondItem="Bb6-lb-m8C" secondAttribute="leading" id="8C5-zD-lrS"/>
+                        <constraint firstAttribute="trailing" secondItem="GWy-Ku-x7k" secondAttribute="trailing" id="J4j-L0-Stk"/>
+                        <constraint firstItem="rdN-w3-Nt2" firstAttribute="leading" secondItem="Bb6-lb-m8C" secondAttribute="leading" id="SW9-1a-Xrb"/>
+                        <constraint firstItem="rdN-w3-Nt2" firstAttribute="top" secondItem="GWy-Ku-x7k" secondAttribute="bottom" constant="30" id="YXD-JY-bPj"/>
+                        <constraint firstAttribute="trailing" secondItem="rdN-w3-Nt2" secondAttribute="trailing" id="cHK-ux-EXZ"/>
+                        <constraint firstAttribute="bottom" secondItem="EkF-rv-cL7" secondAttribute="bottom" id="v34-1q-LPc"/>
+                        <constraint firstItem="EkF-rv-cL7" firstAttribute="top" secondItem="rdN-w3-Nt2" secondAttribute="bottom" constant="40" id="wUa-IS-Vp4"/>
+                        <constraint firstItem="GWy-Ku-x7k" firstAttribute="top" secondItem="Bb6-lb-m8C" secondAttribute="top" id="xWR-CZ-eMO"/>
+                        <constraint firstItem="EkF-rv-cL7" firstAttribute="centerX" secondItem="Bb6-lb-m8C" secondAttribute="centerX" id="zJc-Eg-MMf"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Bb6-lb-m8C" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="Gw5-7O-odm"/>
+                <constraint firstItem="Bb6-lb-m8C" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="oxL-Sh-iiS"/>
+                <constraint firstItem="Bb6-lb-m8C" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="zgW-24-EIH"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="signInButton" destination="EkF-rv-cL7" id="uH8-u5-JB4"/>
+            </connections>
+            <point key="canvasLocation" x="-28.244274809160306" y="16.549295774647888"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="LoginRequired" width="256" height="256"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

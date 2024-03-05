@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="312" id="KGk-i7-Jjw" customClass="NewestMoviesTableViewCell" customModule="MovieApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="355" height="312"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="355" height="312"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="4Gy-g1-isx">
+                        <rect key="frame" x="0.0" y="0.0" width="355" height="260"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="260" id="Phb-I4-xNX"/>
+                        </constraints>
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="I2H-mz-RW5">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                    </collectionView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="4Gy-g1-isx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="6wS-CH-9UE"/>
+                    <constraint firstItem="4Gy-g1-isx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="8Db-fq-Usp"/>
+                    <constraint firstAttribute="bottom" secondItem="4Gy-g1-isx" secondAttribute="bottom" id="DeA-i9-QTy"/>
+                    <constraint firstAttribute="trailing" secondItem="4Gy-g1-isx" secondAttribute="trailing" id="EbY-J7-4gG"/>
+                    <constraint firstItem="4Gy-g1-isx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Pye-CY-0SU"/>
+                    <constraint firstAttribute="bottom" secondItem="4Gy-g1-isx" secondAttribute="bottom" id="VqP-Bu-RLp"/>
+                    <constraint firstAttribute="trailing" secondItem="4Gy-g1-isx" secondAttribute="trailing" id="YmJ-DA-3XX"/>
+                    <constraint firstItem="4Gy-g1-isx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="wph-hu-UoL"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="collectionView" destination="4Gy-g1-isx" id="JJN-q3-Yfw"/>
+                <outlet property="newestMovieCollectionViewHeight" destination="Phb-I4-xNX" id="1rs-7v-Fbj"/>
+            </connections>
+            <point key="canvasLocation" x="49.618320610687022" y="-74.647887323943664"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
