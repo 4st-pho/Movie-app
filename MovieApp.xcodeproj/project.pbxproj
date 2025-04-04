@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D37DE372D9FBEC200D1EC97 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE362D9FBEC200D1EC97 /* RxBlocking */; };
+		6D37DE392D9FBEC200D1EC97 /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE382D9FBEC200D1EC97 /* RxBlocking-Dynamic */; };
+		6D37DE3B2D9FBEC200D1EC97 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE3A2D9FBEC200D1EC97 /* RxCocoa */; };
+		6D37DE3D2D9FBEC200D1EC97 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE3C2D9FBEC200D1EC97 /* RxCocoa-Dynamic */; };
+		6D37DE3F2D9FBEC200D1EC97 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE3E2D9FBEC200D1EC97 /* RxRelay */; };
+		6D37DE422D9FBF7500D1EC97 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE412D9FBF7500D1EC97 /* Swinject */; };
+		6D37DE442D9FBF7500D1EC97 /* Swinject-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D37DE432D9FBF7500D1EC97 /* Swinject-Dynamic */; };
 		8405503A2B22A7D400C2E9CA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840550392B22A7D400C2E9CA /* AuthService.swift */; };
 		8405503E2B22A92200C2E9CA /* DefaultAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405503D2B22A92200C2E9CA /* DefaultAuthService.swift */; };
 		840EEB6F2B2052200004BC1B /* LoggedInMiddlewareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840EEB6E2B2052200004BC1B /* LoggedInMiddlewareView.xib */; };
@@ -313,7 +320,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D37DE3F2D9FBEC200D1EC97 /* RxRelay in Frameworks */,
+				6D37DE442D9FBF7500D1EC97 /* Swinject-Dynamic in Frameworks */,
+				6D37DE392D9FBEC200D1EC97 /* RxBlocking-Dynamic in Frameworks */,
+				6D37DE422D9FBF7500D1EC97 /* Swinject in Frameworks */,
+				6D37DE3D2D9FBEC200D1EC97 /* RxCocoa-Dynamic in Frameworks */,
 				C1289ED3398299821E713B43 /* libPods-MovieApp.a in Frameworks */,
+				6D37DE3B2D9FBEC200D1EC97 /* RxCocoa in Frameworks */,
+				6D37DE372D9FBEC200D1EC97 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,6 +1060,15 @@
 			dependencies = (
 			);
 			name = MovieApp;
+			packageProductDependencies = (
+				6D37DE362D9FBEC200D1EC97 /* RxBlocking */,
+				6D37DE382D9FBEC200D1EC97 /* RxBlocking-Dynamic */,
+				6D37DE3A2D9FBEC200D1EC97 /* RxCocoa */,
+				6D37DE3C2D9FBEC200D1EC97 /* RxCocoa-Dynamic */,
+				6D37DE3E2D9FBEC200D1EC97 /* RxRelay */,
+				6D37DE412D9FBF7500D1EC97 /* Swinject */,
+				6D37DE432D9FBF7500D1EC97 /* Swinject-Dynamic */,
+			);
 			productName = MovieApp;
 			productReference = 844DA0F92AF33C8900C5F562 /* FilmKu.app */;
 			productType = "com.apple.product-type.application";
@@ -1074,6 +1097,10 @@
 				Base,
 			);
 			mainGroup = 844DA0F02AF33C8900C5F562;
+			packageReferences = (
+				6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				6D37DE402D9FBF7500D1EC97 /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			productRefGroup = 844DA0FA2AF33C8900C5F562 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1485,6 +1512,63 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+		6D37DE402D9FBF7500D1EC97 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6D37DE362D9FBEC200D1EC97 /* RxBlocking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxBlocking;
+		};
+		6D37DE382D9FBEC200D1EC97 /* RxBlocking-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxBlocking-Dynamic";
+		};
+		6D37DE3A2D9FBEC200D1EC97 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		6D37DE3C2D9FBEC200D1EC97 /* RxCocoa-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxCocoa-Dynamic";
+		};
+		6D37DE3E2D9FBEC200D1EC97 /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE352D9FBEC200D1EC97 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		6D37DE412D9FBF7500D1EC97 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE402D9FBF7500D1EC97 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		6D37DE432D9FBF7500D1EC97 /* Swinject-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D37DE402D9FBF7500D1EC97 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = "Swinject-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 844DA0F12AF33C8900C5F562 /* Project object */;
 }
