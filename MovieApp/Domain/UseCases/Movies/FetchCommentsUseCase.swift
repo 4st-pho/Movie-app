@@ -10,7 +10,7 @@ protocol FetchCommentsUseCase {
 final class DefaultFetchCommentsUseCase: FetchCommentsUseCase {
     private let moviesRepository: MoviesRepository
     
-    init(moviesRepository: MoviesRepository = DefaultMovieRepository()) {
+    init(moviesRepository: MoviesRepository) {
         self.moviesRepository = moviesRepository
     }
     

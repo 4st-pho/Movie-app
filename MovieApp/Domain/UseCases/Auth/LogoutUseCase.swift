@@ -6,7 +6,7 @@ protocol LogOutUseCase {
 
 final class DefaultLogOutUseCase: LogOutUseCase {
     private let authService: AuthService
-    init(authService: AuthService = DefaultAuthService()) {
+    init(authService: AuthService) {
         self.authService = authService
     }
 

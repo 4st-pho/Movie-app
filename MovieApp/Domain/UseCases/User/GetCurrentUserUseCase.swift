@@ -6,7 +6,7 @@ protocol GetCurrentUserUseCase {
 
 final class DefaultGetCurrentUserUseCase: GetCurrentUserUseCase {
     private let appData: AppDataManager
-    init(appData: AppDataManager = AppDataManager.shared) {
+    init(appData: AppDataManager) {
         self.appData = appData
     }
 

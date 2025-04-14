@@ -9,7 +9,7 @@ protocol AddToWatchListUseCase {
 
 final class DefaultAddToWatchListUseCase: AddToWatchListUseCase {
     private let userRepository: UserRepository
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }
     

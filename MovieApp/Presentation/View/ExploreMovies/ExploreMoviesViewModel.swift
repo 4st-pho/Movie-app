@@ -2,8 +2,8 @@ import Foundation
 
 class ExploreMoviesViewModel: BaseViewModel {
     private var fetchMoviesRequestValue = FetchMoviesUseCaseRequestValue(page: 1)
-    private lazy var fetchNewestMoviesUsecase : FetchNewestMoviesUsecase = DefaultFetchNewestMoviesUsecase()
-    private lazy var fetchPopularMoviesUsecase : FetchPoularMoviesUsecase = DefaultFetchPoularMoviesUsecase()
+    private lazy var fetchNewestMoviesUsecase = AppDIContainer.resolve(FetchNewestMoviesUsecase.self)!
+    private lazy var fetchPopularMoviesUsecase = AppDIContainer.resolve(FetchPoularMoviesUsecase.self)!
     
     var loadingState: Observable<Bool>  = Observable(false)
     let error: Observable<String> = Observable("")

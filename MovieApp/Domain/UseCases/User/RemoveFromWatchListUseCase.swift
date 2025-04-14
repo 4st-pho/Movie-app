@@ -9,7 +9,7 @@ protocol RemoveFromWatchListUseCase {
 
 final class DefaultRemoveFromWatchListUseCase: RemoveFromWatchListUseCase {
     private let userRepository: UserRepository
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }
     

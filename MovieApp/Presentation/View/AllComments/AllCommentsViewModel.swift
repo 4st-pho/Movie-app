@@ -2,7 +2,7 @@ import Foundation
 
 class AllCommentsViewModel: BaseViewModel {
     var fetchCommentsRequestValue = FetchCommentsRequestValue(page: 1, pageSize: 20, movieId: "");
-    private var fetchCommentsUseCase : FetchCommentsUseCase = DefaultFetchCommentsUseCase()
+    private var fetchCommentsUseCase  = AppDIContainer.resolve(FetchCommentsUseCase.self)!
     
     var loadingState: Observable<Bool>  = Observable(false)
     let error: Observable<String> = Observable("")

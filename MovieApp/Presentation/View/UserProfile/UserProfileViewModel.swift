@@ -1,8 +1,8 @@
 import Foundation
 
 class UserProfileViewModel : BaseViewModel {
-    private lazy var getCurrentUserUseCase: GetCurrentUserUseCase = DefaultGetCurrentUserUseCase()
-    private lazy var updateUserUseCase: UpdateUserUseCase = DefaultUpdateUserUseCase()
+    private lazy var getCurrentUserUseCase = AppDIContainer.resolve(GetCurrentUserUseCase.self)!
+    private lazy var updateUserUseCase = AppDIContainer.resolve(UpdateUserUseCase.self)!
     lazy var currentUser = getCurrentUserUseCase.execute()
     
     var loadingState: Observable<Bool>  = Observable(false)

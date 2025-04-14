@@ -13,11 +13,8 @@ struct APIError: Error, Decodable {
 
 
 class APIClient {
-    static let shared = APIClient()
     let userCache = UserStorage()
     private let baseURL = AppConfiguration.apiBaseURL
-    
-    private init() {}
     
     private let sessionManager: Session = {
         let configuration = URLSessionConfiguration.default

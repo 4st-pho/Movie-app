@@ -9,15 +9,17 @@ protocol LogInUseCase {
 
 final class DefaultLogInUseCase: LogInUseCase {
     private let authService: AuthService
-    init(authService: AuthService = DefaultAuthService()) {
+    private let appData: AppDataManager
+    init(authService: AuthService, appData: AppDataManager) {
         self.authService = authService
+        self.appData = appData
     }
 
     func execute(requestValue: LoginRequestValue, completion: @escaping (Result<(token: String, user: User), Error>) -> Void) {
         return authService.logIn(email: requestValue.emai, password: requestValue.password) { result in
             switch result {
             case .success(let data):
-                AppDataManager.shared.setCurrentUser(data.user)
+                self.appData.setCurrentUser(data.user)
                 AppConfiguration.setCurrentToken(data.token)
                 print("token: \(data.token)")
                 completion(result)

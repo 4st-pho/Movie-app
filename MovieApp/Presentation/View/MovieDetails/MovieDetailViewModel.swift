@@ -5,14 +5,14 @@ class MovieDetailViewModel: BaseViewModel {
         case remove
     }
     
-    private let fetchCommentsUseCase : FetchCommentsUseCase = DefaultFetchCommentsUseCase()
+    private let fetchCommentsUseCase = AppDIContainer.resolve(FetchCommentsUseCase.self)!
     private var fetchCommentsRequestValue = FetchCommentsRequestValue(page: 1, movieId: "")
-    private lazy var getLocalWatchListIdsUseCase: GetLocalWatchListIdsUseCase = DefaultGetLocalWatchListIdsUseCase()
-    private let setWatchListIdsToLocalUseCase: SetWatchListIdsToLocalUseCase = DefaultSetWatchListIdsToLocalUseCase()
-    private lazy var getCurrentUserUseCase: GetCurrentUserUseCase = DefaultGetCurrentUserUseCase()
-    private lazy var addToWatchListUseCase: AddToWatchListUseCase = DefaultAddToWatchListUseCase()
-    private lazy var addCommentUseCase: AddCommentUseCase = DefaultAddCommentUseCase()
-    private lazy var removeFromWatchListUseCase: RemoveFromWatchListUseCase = DefaultRemoveFromWatchListUseCase()
+    private lazy var getLocalWatchListIdsUseCase = AppDIContainer.resolve(GetLocalWatchListIdsUseCase.self)!
+    private let setWatchListIdsToLocalUseCase = AppDIContainer.resolve(SetWatchListIdsToLocalUseCase.self)!
+    private lazy var getCurrentUserUseCase = AppDIContainer.resolve(GetCurrentUserUseCase.self)!
+    private lazy var addToWatchListUseCase = AppDIContainer.resolve(AddToWatchListUseCase.self)!
+    private lazy var addCommentUseCase = AppDIContainer.resolve(AddCommentUseCase.self)!
+    private lazy var removeFromWatchListUseCase = AppDIContainer.resolve(RemoveFromWatchListUseCase.self)!
     private lazy var user = getCurrentUserUseCase.execute()
     private var debounceTimer: Timer?
     

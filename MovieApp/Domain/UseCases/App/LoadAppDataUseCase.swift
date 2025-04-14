@@ -6,7 +6,7 @@ protocol LoadAppDataUseCase {
 
 final class DefaultLoadAppDataUseCase: LoadAppDataUseCase {
     private let appData: AppDataManager
-    init(appData: AppDataManager = AppDataManager.shared) {
+    init(appData: AppDataManager) {
         self.appData = appData
     }
     

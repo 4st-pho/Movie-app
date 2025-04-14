@@ -1,7 +1,7 @@
 import Foundation
 
 class RegisterViewModel : BaseViewModel{
-    lazy var registerUseCase: RegisterUseCase = DefaultRegisterUseCase()
+    lazy var registerUseCase = AppDIContainer.resolve(RegisterUseCase.self)!
     var loadingState: Observable<Bool>  = Observable(false)
     var error: Observable<String>  = Observable("")
     var successMessage: Observable<String>  = Observable("")

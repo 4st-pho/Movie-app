@@ -9,7 +9,7 @@ protocol RegisterUseCase {
 
 final class DefaultRegisterUseCase: RegisterUseCase {
     private let authService: AuthService
-    init(authService: AuthService = DefaultAuthService()) {
+    init(authService: AuthService) {
         self.authService = authService
     }
 

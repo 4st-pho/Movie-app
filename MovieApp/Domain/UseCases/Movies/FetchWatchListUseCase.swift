@@ -10,10 +10,11 @@ protocol FetchWatchListUsecase {
 final class DefaultFetchWatchListUsecase: FetchWatchListUsecase {
     
     private let userRepository: UserRepository
-    private let appData = AppDataManager.shared
+    private let appData: AppDataManager
     
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository, appData: AppDataManager) {
         self.userRepository = userRepository
+        self.appData = appData
     }
     
     func execute(

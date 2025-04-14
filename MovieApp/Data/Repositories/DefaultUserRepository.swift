@@ -6,7 +6,7 @@ final class DefaultUserRepository {
     private let cache: UserStorage
     private let movieCache: MoviesStorage
     
-    init(apiClient: APIClient = APIClient.shared, cache: UserStorage = UserStorage(), movieCache: MoviesStorage = MoviesStorage()) {
+    init(apiClient: APIClient, cache: UserStorage, movieCache: MoviesStorage) {
         self.apiClient = apiClient
         self.cache = cache
         self.movieCache = movieCache

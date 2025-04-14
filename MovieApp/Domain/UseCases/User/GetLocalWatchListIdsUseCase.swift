@@ -6,7 +6,7 @@ protocol GetLocalWatchListIdsUseCase {
 
 final class DefaultGetLocalWatchListIdsUseCase: GetLocalWatchListIdsUseCase {
     private let appData: AppDataManager
-    init(appData: AppDataManager = AppDataManager.shared) {
+    init(appData: AppDataManager) {
         self.appData = appData
     }
 

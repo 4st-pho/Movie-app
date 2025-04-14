@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 class MovieSearchViewModel : BaseViewModel {
     
-    private let searchMoviesUsecase: SearchMoviesUseCase = DefaultSearchMoviesUseCase()
-    private lazy var getCurrentUserUseCase: GetCurrentUserUseCase = DefaultGetCurrentUserUseCase()
+    private let searchMoviesUsecase = AppDIContainer.resolve(SearchMoviesUseCase.self)!
+    private lazy var getCurrentUserUseCase = AppDIContainer.resolve(GetCurrentUserUseCase.self)!
     private var searchRequestValue = SearchMoviesUseCaseRequestValue(title: "", page: 1)
     private var debounceTimer: Timer?
     lazy var currentUser = getCurrentUserUseCase.execute()

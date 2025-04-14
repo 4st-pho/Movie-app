@@ -1,9 +1,9 @@
 import Foundation
 
 class SideMenuViewMode : BaseViewModel {
-    private lazy var getCurrentUserUseCase: GetCurrentUserUseCase = DefaultGetCurrentUserUseCase()
+    private lazy var getCurrentUserUseCase = AppDIContainer.resolve(GetCurrentUserUseCase.self)!
     lazy var currentUser = getCurrentUserUseCase.execute()
-    lazy var logOutUseCae : LogOutUseCase = DefaultLogOutUseCase()
+    lazy var logOutUseCae = AppDIContainer.resolve(LogOutUseCase.self)!
     let reloadApp: Observable<Bool> = Observable(false)
     let reloadData: Observable<Bool> = Observable(false)
     let error: Observable<String> = Observable("")

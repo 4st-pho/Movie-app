@@ -1,10 +1,10 @@
 import Foundation
 class WatchListViewModel: BaseViewModel {
 
-    private let setWatchListIdsToLocalUseCase: SetWatchListIdsToLocalUseCase = DefaultSetWatchListIdsToLocalUseCase()
-    private let fetchWatchListUseCase: FetchWatchListUsecase = DefaultFetchWatchListUsecase()
-    private let updateWatchListUsecase: UpdateWatchListUsecase = DefaultUpdateWatchListUsecase()
-    private lazy var getCurrentUserUseCase: GetCurrentUserUseCase = DefaultGetCurrentUserUseCase()
+    private let setWatchListIdsToLocalUseCase = AppDIContainer.resolve(SetWatchListIdsToLocalUseCase.self)!
+    private let fetchWatchListUseCase = AppDIContainer.resolve(FetchWatchListUsecase.self)!
+    private let updateWatchListUsecase = AppDIContainer.resolve(UpdateWatchListUsecase.self)!
+    private lazy var getCurrentUserUseCase = AppDIContainer.resolve(GetCurrentUserUseCase.self)!
     lazy var isLoggedIn: Bool = getCurrentUserUseCase.execute() != nil
     var watchListIds: [String] = []
     

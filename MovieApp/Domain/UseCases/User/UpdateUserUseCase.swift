@@ -9,7 +9,6 @@ protocol UpdateUserUseCase {
 }
 
 final class DefaultUpdateUserUseCase: UpdateUserUseCase {
-    let appData = AppDataManager.shared
     func execute(data: [String : Any], file: Data?, completion: @escaping (Result<User, Error>) -> Void) {
         let uid = appData.getCurrentUser()?.id ?? ""
         return userRepository.updateUserWithImage(id: uid, data: data, file: file){ [weak self] result in
@@ -24,8 +23,10 @@ final class DefaultUpdateUserUseCase: UpdateUserUseCase {
         }
     }
     
+    let appData: AppDataManager
     private let userRepository: UserRepository
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository, appData: AppDataManager) {
         self.userRepository = userRepository
+        self.appData = appData
     }
 }

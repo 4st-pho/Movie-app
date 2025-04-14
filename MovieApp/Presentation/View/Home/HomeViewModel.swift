@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 class HomeViewModel : BaseViewModel {
-    let fetchNewestMoviesUsecase : FetchNewestMoviesUsecase = DefaultFetchNewestMoviesUsecase()
-    let fetchPopularMoviesUsecase : FetchPoularMoviesUsecase = DefaultFetchPoularMoviesUsecase()
+    let fetchNewestMoviesUsecase = AppDIContainer.resolve(FetchNewestMoviesUsecase.self)!
+    let fetchPopularMoviesUsecase = AppDIContainer.resolve(FetchPoularMoviesUsecase.self)!
     let fetchPopularMoviesRequestValue = FetchMoviesUseCaseRequestValue(page: 1)
     let fetchNewestMoviesRequestValue = FetchMoviesUseCaseRequestValue(page: 1)
     

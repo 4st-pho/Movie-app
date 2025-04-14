@@ -5,7 +5,7 @@ final class DefaultMovieRepository {
     private let apiClient: APIClient
     private let cache: MoviesStorage
     
-    init(apiClient: APIClient = APIClient.shared, cache: MoviesStorage = MoviesStorage()) {
+    init(apiClient: APIClient, cache: MoviesStorage = MoviesStorage()) {
         self.apiClient = apiClient
         self.cache = cache
     }

@@ -13,7 +13,7 @@ final class DefaultFetchPoularMoviesUsecase: FetchPoularMoviesUsecase {
     
     private let moviesRepository: MoviesRepository
     
-    init(moviesRepository: MoviesRepository = DefaultMovieRepository()) {
+    init(moviesRepository: MoviesRepository) {
         self.moviesRepository = moviesRepository
     }
     

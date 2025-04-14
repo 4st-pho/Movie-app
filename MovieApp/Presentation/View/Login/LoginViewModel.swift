@@ -1,7 +1,7 @@
 import Foundation
 
 class LoginViewModel : BaseViewModel{
-    let loginUseCase: LogInUseCase = DefaultLogInUseCase()
+    let loginUseCase = AppDIContainer.resolve(LogInUseCase.self)!
     var loadingState: Observable<Bool>  = Observable(false)
     var reloadApp: Observable<Bool>  = Observable(false)
     var error: Observable<String>  = Observable("")
