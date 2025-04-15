@@ -29,6 +29,7 @@ class LoginViewController: BaseViewController {
     
     // MARK: - Binding View model
     private func binding(){
+        
         viewModel.error.observe(on: self){[weak self] in self?.showError($0)}
         viewModel.loadingState.observe(on: self){[weak self] in self?.updateLoadingState($0)}
         viewModel.reloadApp.observe(on: self) { hasReload in
