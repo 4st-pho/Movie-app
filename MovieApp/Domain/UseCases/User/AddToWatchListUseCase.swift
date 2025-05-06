@@ -1,19 +1,25 @@
 import Foundation
+import RxSwift
 
 protocol AddToWatchListUseCase {
-    func execute(
-        requestValue: WatchListActionRequestValue,
-        completion: @escaping (Result<Any?, Error>) -> Void
-    )
+    @discardableResult
+    func execute(requestValue: WatchListActionRequestValue) -> Observable<Result<Any?, Error>>
 }
 
 final class DefaultAddToWatchListUseCase: AddToWatchListUseCase {
     private let userRepository: UserRepository
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }
     
-    func execute(requestValue: WatchListActionRequestValue, completion: @escaping (Result<Any?, Error>) -> Void) {
-        userRepository.addToWatchList(userId: requestValue.userId, movieId: requestValue.movieId, completion: completion)
+    @discardableResult
+    func execute(requestValue: WatchListActionRequestValue) -> Observable<Result<Any?, Error>> {
+        return Observable.create { signal in
+            self.userRepository.addToWatchList(userId: requestValue.userId, movieId: requestValue.movieId) { result in
+                signal.onNext(result)
+                signal.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 }

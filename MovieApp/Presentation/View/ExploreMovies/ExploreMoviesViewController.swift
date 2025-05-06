@@ -1,4 +1,7 @@
 import UIKit
+import RxSwift
+import RxCocoa
+
 enum TypeOfMoviesView: String{
     case popular = "Popular"
     case newest = "Now Showing"
@@ -8,10 +11,11 @@ class ExploreMoviesViewController: BaseViewController {
     // MARK: - Variables
     let movieCellNibName = String(describing: HorizontalMovieTableViewCell.self)
     let loadingCellNibName = String(describing: LoadingTableViewCell.self)
-    var typeOfMoviesView: TypeOfMoviesView?
+    var typeOfMoviesView: TypeOfMoviesView = .newest
     private let viewModel = ExploreMoviesViewModel()
     private var movies: [Movie]?
     private var hasMoreData = false
+    private let loadMoreTrigger = PublishRelay<Void>()
     
     // MARK: - Outlets
     @IBOutlet private(set) weak var moviesTableView: UITableView!
@@ -25,22 +29,33 @@ class ExploreMoviesViewController: BaseViewController {
     
     // MARK: - Binding View Model
     private func bindingViewModel(){
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.movies.observe(on: self) { [weak self] in self?.updateListOfMovies($0) }
-        viewModel.hasMoreData.observe(on: self) { [weak self] in self?.handleHasMoreData($0) }
-        if let typeOfMoviesView = typeOfMoviesView{
-            viewModel.typeOfMoviesView = typeOfMoviesView
-        }
-        viewModel.load()
         
+        let input = ExploreMoviesViewModel.Input (
+            firstLoadTrigger: .just(()),
+            loadMoreTrigger: loadMoreTrigger.asDriverOnErrorJustComplete(),
+            typeOfMoviesView: .just(typeOfMoviesView))
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loadingState.drive { [weak self] state in
+            self?.updateLoadingState(state)
+        }.disposed(by: disposeBag)
+        
+        output.error.drive { [weak self] error in
+            self?.showError(error)
+        }.disposed(by: disposeBag)
+        
+        output.movies.drive { [weak self] movies in
+            self?.updateListOfMovies(movies)
+        }.disposed(by: disposeBag)
+        
+        output.hasMoreData.distinctUntilChanged().drive { [weak self] value in
+            self?.handleHasMoreData(value)
+        }.disposed(by: disposeBag)
     }
     
     private func handleHasMoreData (_ hasMoreData: Bool) {
         self.hasMoreData = hasMoreData
-        DispatchQueue.main.async { [weak self] in
-            self?.moviesTableView.reloadData()
-        }
     }
     
     private func updateListOfMovies(_ movies: [Movie]){
@@ -53,7 +68,7 @@ class ExploreMoviesViewController: BaseViewController {
     // MARK: - UI Setup
     private func setupUI() {
         setupTableView()
-        setupNavigationBar(title: typeOfMoviesView?.rawValue ?? "")
+        setupNavigationBar(title: typeOfMoviesView.rawValue)
         tabBarController?.tabBar.isHidden  = true
     }
     
@@ -106,7 +121,7 @@ extension ExploreMoviesViewController : UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            viewModel.loadMore()
+            loadMoreTrigger.accept(())
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

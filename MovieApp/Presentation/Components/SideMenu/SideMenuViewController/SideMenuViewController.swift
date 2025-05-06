@@ -1,5 +1,7 @@
 import UIKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 struct SideMenuModel {
     enum SideMenuOption: String {
@@ -18,6 +20,7 @@ protocol SideMenuDelegate: AnyObject {
 }
 
 class SideMenuViewController: UIViewController {
+    private let disposeBag = DisposeBag()
     
     // MARK: - Outlets
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -30,16 +33,21 @@ class SideMenuViewController: UIViewController {
     weak var delegate: SideMenuDelegate?
     private let transitionManager = SideMenuTransitionManager()
     private let sideMenuCellNibName = String(describing: SideMenuCell.self)
-    private lazy var menu: [SideMenuModel] =
-    viewModel.currentUser == nil ?
-    [
-        SideMenuModel(icon: UIImage(systemName: "person.fill")!, option: .login),
-        SideMenuModel(icon: UIImage(systemName: "person.badge.plus.fill")!, option: .register)
-    ] :
-    [
-        SideMenuModel(icon: UIImage(systemName: "person")! , option: .profile),
-        SideMenuModel(icon: UIImage(systemName: "arrowshape.turn.up.left.fill")! , option: .logout),
-    ]
+    private let logoutTrigger = PublishRelay<Void>()
+    private let reloadAppTrigger = PublishRelay<Void>()
+    private let reloadDataTrigger = PublishRelay<Void>()
+    private let currentUser = BehaviorRelay<User?>(value: nil)
+    private var menu: [SideMenuModel] {
+        return currentUser.value == nil ?
+        [
+            SideMenuModel(icon: UIImage(systemName: "person.fill")!, option: .login),
+            SideMenuModel(icon: UIImage(systemName: "person.badge.plus.fill")!, option: .register)
+        ] :
+        [
+            SideMenuModel(icon: UIImage(systemName: "person")! , option: .profile),
+            SideMenuModel(icon: UIImage(systemName: "arrowshape.turn.up.left.fill")! , option: .logout),
+        ]
+    }
     
     // MARK: - Lifecycle
     init(delegate: SideMenuDelegate) {
@@ -61,21 +69,36 @@ class SideMenuViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.reloadUserData()
     }
     // MARK: - Binding View Model
     private func bindingViewModel(){
-        viewModel.reloadData.observe(on: self) { [weak self] in self?.reloadData($0) }
-        viewModel.reloadApp.observe(on: self) { hasReload in
-            if hasReload{
-                Utils.resetRootView()
-            }
-        }
-        viewModel.load()
+        let input = SideMenuViewMode.Input(
+            reloadAppTrigger: reloadAppTrigger.asDriverOnErrorJustComplete(),
+            reloadDataTrigger: reloadDataTrigger.asDriverOnErrorJustComplete(),
+            logoutTrigger: logoutTrigger.asSignalOnErrorJustComplete()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.currentUser.drive(currentUser).disposed(by: disposeBag)
+        
+        currentUser.subscribe { _ in
+            self.sideMenuTableView.reloadData()
+        }.disposed(by: disposeBag)
+        
+        output.reloadApp.filter({$0}).drive { _ in
+            Utils.resetRootView()
+        }.disposed(by: disposeBag)
+        
+        output.reloadData.drive { [weak self] _ in
+            self?.reloadData(true)
+        }.disposed(by: disposeBag)
+        
     }
+    
     func reloadData(_ needReload: Bool) {
         if needReload {
-            guard let user = viewModel.currentUser else { return }
+            guard let user = currentUser.value else { return }
             headerImageView.kf.setImage(with: URL(string: user.avatar))
             titleLabel.text = user.username
             subtitleLabel.text = user.email
@@ -97,12 +120,15 @@ class SideMenuViewController: UIViewController {
     }
     
     private func customOutlets(){
-        guard let user = viewModel.currentUser else { return }
-        headerImageView.layer.cornerRadius = 40
-        headerImageView.contentMode = .scaleAspectFill
-        headerImageView.kf.setImage(with: URL(string: user.avatar))
-        titleLabel.text = user.username
-        subtitleLabel.text = user.email
+        currentUser.asDriverOnErrorJustComplete().drive { [weak self] user in
+            guard let self  = self else { return }
+            guard let user = user else { return }
+            headerImageView.layer.cornerRadius = 40
+            headerImageView.contentMode = .scaleAspectFill
+            headerImageView.kf.setImage(with: URL(string: user.avatar))
+            titleLabel.text = user.username
+            subtitleLabel.text = user.email
+        }.disposed(by: disposeBag)
     }
 }
 // MARK: - Side Menu Table View Delegate
@@ -132,7 +158,7 @@ extension SideMenuViewController: UITableViewDataSource {
         dismiss(animated: true){ [weak self] in
             guard let self = self else { return }
             if(option == .logout){
-                viewModel.logOut()
+                logoutTrigger.accept(())
             }
             else{
                 self.delegate?.sideMenuOptionSelected(option)

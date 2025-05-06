@@ -1,19 +1,30 @@
 import Foundation
+import RxSwift
 
 protocol FetchWatchListUsecase {
-    func execute(
-        cached: @escaping ([Movie]) -> Void,
-        completion: @escaping (Result<[Movie], Error>) -> Void
-    )
+    func execute() -> Observable<Result<[Movie], Error>>
 }
 
 final class DefaultFetchWatchListUsecase: FetchWatchListUsecase {
+    func execute() -> Observable<Result<[Movie], Error>> {
+        return Observable.create { [weak self] signal in
+            self?.userRepository.fetchWatchList(userId: self?.appData.getCurrentUser()?.id ?? "") { movies in
+                signal.onNext(.success(movies))
+            } completion: { result in
+                signal.onNext(result)
+                signal.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
+    
     
     private let userRepository: UserRepository
-    private let appData = AppDataManager.shared
+    private let appData: AppDataManager
     
-    init(userRepository: UserRepository = DefaultUserRepository()) {
+    init(userRepository: UserRepository, appData: AppDataManager) {
         self.userRepository = userRepository
+        self.appData = appData
     }
     
     func execute(

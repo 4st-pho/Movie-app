@@ -1,5 +1,7 @@
 import UIKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 enum HomeSectionHeader: String, CaseIterable{
     case nowShowing = "Now Showing"
@@ -10,17 +12,39 @@ class HomeViewController: BaseViewController {
     
     // MARK: - Variables
     private var viewModel =  HomeViewModel()
-    private let popularMoviesCellNibName = String(describing: HorizontalMovieTableViewCell.self)
-    private let movieSectionHeaderNibName = String(describing: MovieSectionHeader.self)
-    private let newestMoviesCellNibName = String(describing: NewestMoviesTableViewCell.self)
     private var popularMovies: [Movie] = []
     private let sectionHeaderTitle: [String] = HomeSectionHeader.allCases.map{$0.rawValue}
     
+    let firstLoadTrigger = PublishRelay<Void>()
+    let showAppLoading = BehaviorRelay<Bool>(value: true)
+    
     // MARK: - Outlets
-    @IBOutlet private(set) weak var moviesTableView: UITableView!
+    @IBOutlet private(set) weak var moviesTableView: UITableView! {
+        didSet {
+            moviesTableView.letIt {
+                $0.register(nibTypes: [HorizontalMovieTableViewCell.self, NewestMoviesTableViewCell.self])
+                $0.register(
+                    UINib(nibName: MovieSectionHeader.className, bundle: nil),
+                    forHeaderFooterViewReuseIdentifier: MovieSectionHeader.className
+                )
+                $0.dataSource = self
+                $0.delegate = self
+                
+                $0.separatorStyle = .none
+                $0.estimatedRowHeight = Constant.horiontalMovieTableViewCellHeight
+                $0.rowHeight = UITableView.automaticDimension
+                
+                $0.refreshControl = refreshControl
+                $0.showsVerticalScrollIndicator = false
+            }
+        }
+    }
     
     // MARK: - UI Components
-    let refreshControl = UIRefreshControl()
+    var refreshControl = UIRefreshControl() {
+        didSet {
+            refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)        }
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -37,67 +61,48 @@ class HomeViewController: BaseViewController {
     
     // MARK: - Data setup
     private func bindingData(){
-        viewModel.newestMovies.observe(on: self) { [weak self] in self?.updateNewestMovies($0) }
-        viewModel.popularMovies.observe(on: self) { [weak self] in self?.updatePopularMovies($0) }
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.load()
+
+        
+        let input = HomeViewModel.Input(
+            firstLoadTrigger: firstLoadTrigger.asDriverOnErrorJustComplete(),
+            showAppLoading: showAppLoading.asDriverOnErrorJustComplete()
+        )
+        let output = viewModel.transform(input: input)
+        output.newestMovies.drive {[weak self] in self?.updateNewestMovies($0) }.disposed(by: disposeBag)
+        output.popularMovies.drive{ [weak self] in self?.updatePopularMovies($0) }.disposed(by: disposeBag)
+        output.loadingState.drive{ [weak self] in self?.updateLoadingState($0) }.disposed(by: disposeBag)
+        output.error.drive{ [weak self] in self?.showError($0) }.disposed(by: disposeBag)
+        output.firstLoadFinish.drive{[weak self] _ in self?.refreshControl.endRefreshing() }.disposed(by: disposeBag)
+        firstLoadTrigger.accept(())
     }
     
-    private func updateNewestMovies(_ movies: [Movie]){
-        DispatchQueue.main.async { [weak self] in
-            guard let self  = self else { return }
-            let indexPath = (IndexPath(row: 0, section: 0))
-            guard let cell =  self.moviesTableView.cellForRow(at: indexPath) as? NewestMoviesTableViewCell else { return }
-            cell.movies = movies
-            cell.collectionView.reloadData()
-        }
+    private func updateNewestMovies(_ movies: [Movie]) {
+        let indexPath = (IndexPath(row: 0, section: 0))
+        guard let cell =  self.moviesTableView.cellForRow(at: indexPath) as? NewestMoviesTableViewCell else { return }
+        cell.movies = movies
+        cell.collectionView.reloadData()
+        
     }
     
-    private func updatePopularMovies(_ movies: [Movie]){
+    private func updatePopularMovies(_ movies: [Movie]) {
         popularMovies = movies
-        DispatchQueue.main.async { [weak self] in
-            self?.moviesTableView.reloadData()
-        }
+        moviesTableView.reloadData()
     }
     
     // MARK: - UI Setup
     private func setupUI() {
-        setupTableView()
         setupNavigationBar(.menuSideAndNotification, title: "FilmKu")
-    }
-    
-    private func setupTableView(){
-        moviesTableView.dataSource = self
-        moviesTableView.delegate = self
-        
-        let popularMoviesCellNib = UINib(nibName: popularMoviesCellNibName, bundle: nil)
-        let newestMoviesCellNib = UINib(nibName: newestMoviesCellNibName, bundle: nil)
-        let movieSectionHeaderNib = UINib(nibName: movieSectionHeaderNibName, bundle: nil)
-        moviesTableView.register(popularMoviesCellNib, forCellReuseIdentifier: popularMoviesCellNibName)
-        moviesTableView.register(newestMoviesCellNib, forCellReuseIdentifier: newestMoviesCellNibName)
-        moviesTableView.register(movieSectionHeaderNib, forHeaderFooterViewReuseIdentifier: movieSectionHeaderNibName)
-        
-        
-        moviesTableView.separatorStyle = .none
-        moviesTableView.estimatedRowHeight = Constant.horiontalMovieTableViewCellHeight
-        moviesTableView.rowHeight = UITableView.automaticDimension
-        
-        moviesTableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        moviesTableView.showsVerticalScrollIndicator = false
     }
     
     // MARK: - Selectors
     @objc private func refreshData() {
-        viewModel.load(showLoading: false) { [weak self] in
-            self?.refreshControl.endRefreshing()
-        }
+        showAppLoading.accept(false)
+        firstLoadTrigger.accept(())
     }
 }
 
 // MARK: - Popular Movie Table View Data Source
-extension HomeViewController : UITableViewDataSource{
+extension HomeViewController : UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionHeaderTitle.count
     }
@@ -108,15 +113,13 @@ extension HomeViewController : UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0, let cell =  tableView.dequeueReusableCell(withIdentifier: newestMoviesCellNibName, for: indexPath) as? NewestMoviesTableViewCell
-        {
+        if indexPath.section == 0 {
+            let cell =  tableView.dequeueReusableCell(with: NewestMoviesTableViewCell.self, for: indexPath)
             cell.delegate = self
             return cell
         }
         
-        guard let cell =  tableView.dequeueReusableCell(withIdentifier: popularMoviesCellNibName, for: indexPath) as? HorizontalMovieTableViewCell else{
-            return UITableViewCell()
-        }
+        let cell =  tableView.dequeueReusableCell(with: HorizontalMovieTableViewCell.self, for: indexPath)
         let movie = popularMovies[indexPath.row]
         let imageUrl = URL(string: movie.imageUrl)
         cell.movieImageView.kf.setImage(with: imageUrl)
@@ -128,7 +131,7 @@ extension HomeViewController : UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let movieHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: movieSectionHeaderNibName) as? MovieSectionHeader
+        let movieHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: MovieSectionHeader.className) as? MovieSectionHeader
         movieHeader?.delegate = self
         movieHeader?.titleLabel.text = sectionHeaderTitle[section]
         movieHeader?.contentView.layoutMargins = UIEdgeInsets.zero

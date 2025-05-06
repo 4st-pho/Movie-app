@@ -1,24 +1,31 @@
 import Foundation
+import RxSwift
 
 protocol LogOutUseCase {
-    func execute( completion: @escaping (Result<Any?, Error>) -> Void)
+    func execute() -> Observable<Result<Any?, Error>>
 }
 
 final class DefaultLogOutUseCase: LogOutUseCase {
+    
+    
     private let authService: AuthService
-    init(authService: AuthService = DefaultAuthService()) {
+    init(authService: AuthService) {
         self.authService = authService
     }
-
-    func execute(completion: @escaping (Result<Any?, Error>) -> Void) {
-        return authService.logOut() { result in
+    
+    func execute() -> Observable<Result<Any?, Error>> {
+        return Observable.create { [weak self] signal in
+            self?.authService.logOut() { result in
                 switch result {
                 case .success(_):
                     AppConfiguration.setCurrentToken("")
-                    completion(result)
+                    signal.onNext(result)
                 case .failure(_):
-                    completion(result)
+                    signal.onNext(result)
+                }
+                signal.onCompleted()
             }
+            return Disposables.create()
         }
     }
 }

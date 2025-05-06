@@ -1,16 +1,21 @@
 import Foundation
+import RxSwift
 
 protocol GetCurrentUserUseCase {
-    func execute() -> User?
+    func execute() -> Observable<User?>
 }
 
 final class DefaultGetCurrentUserUseCase: GetCurrentUserUseCase {
     private let appData: AppDataManager
-    init(appData: AppDataManager = AppDataManager.shared) {
+    init(appData: AppDataManager) {
         self.appData = appData
     }
 
-    func execute() -> User? {
-        return appData.getCurrentUser()
+    func execute() -> Observable<User?> {
+        return Observable.create { [weak self] signal in
+            signal.onNext(self?.appData.getCurrentUser())
+            signal.onCompleted()
+            return Disposables.create()
+        }
     }
 }

@@ -1,4 +1,5 @@
 import UIKit
+import RxSwift
 
 enum NavigationBarType{
     case defaultNavigationBar
@@ -13,6 +14,7 @@ class BaseViewController: UIViewController, Alertable {
     private var navigationBarType = NavigationBarType.defaultNavigationBar
     private lazy var isSideMenuOpen = false
     private lazy var sideMenuWidth = self.view.frame.width * 0.6
+    let disposeBag = DisposeBag()
     
     // MARK: - UI Components
     private lazy var menuButton =  UIBarButtonItem(

@@ -1,5 +1,7 @@
 import UIKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 class UserProfileViewController: BaseViewController, UINavigationControllerDelegate {
     // MARK: - Variables
@@ -9,6 +11,11 @@ class UserProfileViewController: BaseViewController, UINavigationControllerDeleg
         dateFormatter.dateFormat = "dd/MM/yyyy"
         return dateFormatter
     }()
+    
+    private let imageFileRelay = BehaviorRelay<Data?>(value: nil)
+    private let updateWithImageOption = BehaviorRelay<Bool>(value: false)
+    private let currentUser = BehaviorRelay<User?>(value: nil)
+    private let updateProfileTrigger = PublishRelay<Void>()
     
     // MARK: - Outlets
     @IBOutlet private(set) weak var changePhotoLabel: UILabel!
@@ -49,10 +56,19 @@ class UserProfileViewController: BaseViewController, UINavigationControllerDeleg
     
     // MARK: - Binding View Model
     private func bindingViewModel(){
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.message.observe(on: self) { [weak self] in self?.showMessage($0,title: "Message")}
-        viewModel.load()
+        let input = UserProfileViewModel.Input(
+            username: usernameTextField.rx.text.asDriverOnErrorJustComplete(),
+            birthdate: birthdateTextField.rx.text.asDriverOnErrorJustComplete(),
+            file: imageFileRelay.asDriverOnErrorJustComplete(),
+            updatePrifileTrigger: updateProfileTrigger.asDriverOnErrorJustComplete(),
+            updateWithImage: updateWithImageOption.asDriverOnErrorJustComplete())
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loadingState.drive{ [weak self] in self?.updateLoadingState($0) }.disposed(by: disposeBag)
+        output.error.drive{ [weak self] in self?.showError($0) }.disposed(by: disposeBag)
+        output.message.drive{ [weak self] in self?.showMessage($0,title: "Message")}.disposed(by: disposeBag)
+        output.currentUser.drive(currentUser).disposed(by: disposeBag)
     }
     
     // MARK: - UI Setup
@@ -61,18 +77,19 @@ class UserProfileViewController: BaseViewController, UINavigationControllerDeleg
     }
     
     private func customOutlets() {
-        let currentUser = viewModel.currentUser
-        disableEditing()
-        let imageUrl = URL(string: currentUser?.avatar ?? "")
-        avatarImageView.kf.setImage(with: imageUrl)
-        birthdateTextField.inputView = datePicker
-        emailTextField.text = currentUser?.email
-        usernameTextField.text = currentUser?.username
-        if let birthdate = currentUser?.birthdate {
-            birthdateTextField.text = dateFormatter.string(from: birthdate)
-        }
-        floatButton.applyCustomStyle(style: .float)
-        
+        currentUser.asDriverOnErrorJustComplete().drive { [weak self] currentUser in
+            guard let self  = self else { return }
+            disableEditing()
+            let imageUrl = URL(string: currentUser?.avatar ?? "")
+            avatarImageView.kf.setImage(with: imageUrl)
+            birthdateTextField.inputView = datePicker
+            emailTextField.text = currentUser?.email
+            usernameTextField.text = currentUser?.username
+            if let birthdate = currentUser?.birthdate {
+                birthdateTextField.text = dateFormatter.string(from: birthdate)
+            }
+            floatButton.applyCustomStyle(style: .float)
+        }.disposed(by: disposeBag)
     }
     
     private func disableEditing() {
@@ -95,9 +112,8 @@ class UserProfileViewController: BaseViewController, UINavigationControllerDeleg
     // MARK: - Functions
     func updateUser(){
         let file = avatarImageView.image?.jpegData(compressionQuality: 0.8)
-        let username = usernameTextField.text
-        let birthdate = birthdateTextField.text
-        viewModel.updateUser(username: username, birthdate: birthdate, file: file)
+        imageFileRelay.accept(file)
+        updateProfileTrigger.accept(())
     }
     
     // MARK: - Actions
@@ -130,7 +146,9 @@ extension UserProfileViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[.editedImage] as? UIImage else { return}
         avatarImageView.image = image
-        viewModel.updateWithImage = true
+        let file = avatarImageView.image?.jpegData(compressionQuality: 0.8)
+        imageFileRelay.accept(file)
+        updateWithImageOption.accept(true)
         dismiss(animated: true)
     }
 }

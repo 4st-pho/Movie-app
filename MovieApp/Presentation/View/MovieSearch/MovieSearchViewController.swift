@@ -1,4 +1,6 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class MovieSearchViewController: BaseViewController {
     
@@ -8,7 +10,9 @@ class MovieSearchViewController: BaseViewController {
     let loadingCellNibName = String(describing: LoadingTableViewCell.self)
     let viewModel = MovieSearchViewModel()
     private var hasMoreData: Bool = false
-    
+    private let loadMoreTrigger = PublishRelay<Void>()
+    private let currentUser = BehaviorRelay<User?>(value: nil)
+
     // MARK: - Outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchResultTableView: UITableView!
@@ -29,11 +33,19 @@ class MovieSearchViewController: BaseViewController {
     }
     
     // MARK: - Binding
-    private func binding(){
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.searchResult.observe(on: self) { [weak self] in self?.loadSearchResult($0) }
-        viewModel.hasMoreData.observe(on: self) { [weak self] in self?.handleHasMoreData($0) }
-        viewModel.load()
+    private func binding() {
+        let input = MovieSearchViewModel.Input(
+            firstLoadTrigger: .just(()),
+            loadMoreTrigger: loadMoreTrigger.asDriverOnErrorJustComplete(),
+            searchKeywordChange: searchBar.rx.text.orEmpty.asDriverOnErrorJustComplete()
+        )
+        let output = viewModel.transform(input: input)
+        
+        output.error.drive{ [weak self] in self?.showError($0) }.disposed(by: disposeBag)
+        output.searchResult.drive{ [weak self] in self?.loadSearchResult($0) }.disposed(by: disposeBag)
+        output.hasMoreData.drive{ [weak self] in self?.handleHasMoreData($0) }.disposed(by: disposeBag)
+        output.currentUser.drive(currentUser).disposed(by: disposeBag)
+        output.loadingState.drive{ [weak self] in self?.updateLoadingState($0) }.disposed(by: disposeBag)
     }
     
     private func handleHasMoreData (_ hasMoreData: Bool) {
@@ -53,13 +65,7 @@ class MovieSearchViewController: BaseViewController {
     // MARK: - UI Setup
     private func setupUI() {
         setupTableView()
-        setupSearchBar()
         setupNavigationBar(.hidden)
-    }
-    
-    private func setupSearchBar(){
-        searchBar.delegate = self
-        
     }
     
     private func setupTableView(){
@@ -118,7 +124,7 @@ extension MovieSearchViewController : UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            viewModel.loadMore()
+            loadMoreTrigger.accept(())
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -135,11 +141,5 @@ extension MovieSearchViewController : UITableViewDelegate{
         let vc = MovieDetailViewController()
         vc.movie = self.searchResult?[indexPath.row]
         self.navigationController?.pushViewController(vc, animated: true)
-    }
-}
-
-extension MovieSearchViewController: UISearchBarDelegate{
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.search(keyword: searchText)
     }
 }

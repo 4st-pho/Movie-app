@@ -1,29 +1,36 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class HorizontalMovieTableViewCell: UITableViewCell {
     // MARK: - Variables
-    private let categoryCellNibName = String(describing: CategoryCollectionViewCell.self)
+    let disposeBag = DisposeBag()
     var maxCategory = 6;
     var categories : [String] = [] {
         didSet {
-            categoryColectionView.reloadData()
-            updateConstraints()
+            categoriesRelay.accept(categories)
         }
     }
+    private let categoriesRelay = BehaviorRelay<[String]>(value: [])
     
     // MARK: - Outlets
-    @IBOutlet private(set) weak var categoryColectionView: UICollectionView!
     @IBOutlet private(set) weak var movieNameLabel: UILabel!
     @IBOutlet private(set) weak var durationLabel: UILabel!
     @IBOutlet private(set) weak var movieImageView: UIImageView!
     @IBOutlet private(set) weak var ratingLabel: UILabel!
     @IBOutlet private(set) weak var categoryColectionViewHeight: NSLayoutConstraint!
+    @IBOutlet private(set) weak var categoryColectionView: UICollectionView! {
+        didSet {
+            categoryColectionView.letIt {
+                $0.delegate = self
+                let layout = TagFlowLayout()
+                $0.collectionViewLayout = layout
+                $0.register(nibType: CategoryCollectionViewCell.self)
+            }
+        }
+    }
     
     // MARK: - Lifecycle
-    override func updateConstraints() {
-        super.updateConstraints()
-        self.categoryColectionViewHeight.constant = self.categoryColectionView.collectionViewLayout.collectionViewContentSize.height
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,29 +41,21 @@ class HorizontalMovieTableViewCell: UITableViewCell {
     func setupUI() {
         self.movieImageView.layer.cornerRadius = 8
         self.setupCollectionView()
+        
     }
+    
     
     private func setupCollectionView() {
-        categoryColectionView.dataSource = self
-        categoryColectionView.delegate = self
-        let layout = TagFlowLayout()
-        categoryColectionView.collectionViewLayout = layout
-        let categoryCellNib = UINib(nibName: categoryCellNibName, bundle: nil)
-        categoryColectionView.register(categoryCellNib, forCellWithReuseIdentifier: categoryCellNibName)
-    }
-}
-
-// MARK: - Popular Moview Collection View Data Source
-extension HorizontalMovieTableViewCell : UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories.count > maxCategory ?  maxCategory : categories.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: categoryCellNibName, for: indexPath) as? CategoryCollectionViewCell
-        else { return UICollectionViewCell()}
-        cell.categoryLabel.text = categories[indexPath.row].uppercased()
-        return cell
+        categoryColectionView.rx.bindContentHeight(to: categoryColectionViewHeight).disposed(by: disposeBag)
+        categoriesRelay
+            .asDriver()
+            .drive(categoryColectionView.rx.items) { collectionView, row, element in
+                let indexPath = IndexPath(row: row, section: 0)
+                let cell = collectionView.dequeueReusableCell(with: CategoryCollectionViewCell.self, for: indexPath)
+                cell.categoryLabel.text = self.categories[indexPath.row].uppercased()
+                return cell
+            }
+            .disposed(by: disposeBag)
     }
 }
 

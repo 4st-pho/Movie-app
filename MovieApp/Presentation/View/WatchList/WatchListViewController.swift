@@ -1,4 +1,6 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class WatchListViewController: BaseViewController {
     
@@ -9,6 +11,9 @@ class WatchListViewController: BaseViewController {
     let watchListCellNibName = String(describing: HorizontalMovieTableViewCell.self)
     private lazy var viewModel = WatchListViewModel()
     private var watchList: [Movie] = []
+    private let removeMovieTrigger = PublishRelay<Int>()
+    private var isLoggedIn = BehaviorRelay<Bool>(value: false)
+    private let firstLoadTrigger = PublishRelay<Void>()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -20,15 +25,25 @@ class WatchListViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden  = false
         self.navigationController?.hidesBarsOnSwipe = false
+        self.firstLoadTrigger.accept(())
         super.viewWillAppear(animated)
-        viewModel.load()
     }
     
     // MARK: - Binding View Model
     private func bindingViewModel(){
-        viewModel.watchList.observe(on: self) { [weak self] in self?.updateWatchList($0) }
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
+        
+        let input = WatchListViewModel.Input(
+            firstLoadTrigger: firstLoadTrigger.asDriverOnErrorJustComplete(),
+            removeMovieAtIndex: removeMovieTrigger.asDriverOnErrorJustComplete()
+        )
+        let output = viewModel.transform(input: input)
+        output.watchList.drive{ [weak self] in self?.updateWatchList($0) }.disposed(by: disposeBag)
+        output.loadingState.drive{ [weak self] in self?.updateLoadingState($0) }.disposed(by: disposeBag)
+        output.error.drive{ [weak self] in self?.showError($0) }.disposed(by: disposeBag)
+        output.isLoggedIn.drive(onNext: { isLoggedIn in
+            self.isLoggedIn.accept(isLoggedIn)
+            self.watchListTableView.reloadData()
+        }).disposed(by: disposeBag)
     }
     
     private func updateWatchList(_ watchList: [Movie]){
@@ -63,7 +78,7 @@ class WatchListViewController: BaseViewController {
 
 extension WatchListViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(!viewModel.isLoggedIn){
+        if(!isLoggedIn.value) {
             tableView.showPlaceholderView(type: .loginRequired, playholderDelegate: self)
             return 0
         }
@@ -106,8 +121,7 @@ extension WatchListViewController : UITableViewDelegate{
         if editingStyle == .delete {
             watchList.remove (at: indexPath.row)
             watchListTableView.deleteRows(at: [indexPath], with: .automatic)
-            viewModel.removeMovie(at: indexPath.row)
-            viewModel.updateWatchList()
+            removeMovieTrigger.accept(indexPath.row)
         }
     }
 }

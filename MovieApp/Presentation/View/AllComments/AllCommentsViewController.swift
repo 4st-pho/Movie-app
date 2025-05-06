@@ -1,4 +1,6 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class AllCommentsViewController: BaseViewController {
     private lazy var viewModel  = AllCommentsViewModel()
@@ -8,7 +10,17 @@ class AllCommentsViewController: BaseViewController {
     private let movieCellNibName = String(describing: CommentsTableViewCell.self)
     private let loadingCellNibName = String(describing: LoadingTableViewCell.self)
     // MARK: - Outlets
-    @IBOutlet weak var commentsTableView: UITableView!
+    private let loadMoreTrigger = PublishSubject<Void>()
+    @IBOutlet weak var commentsTableView: UITableView! {
+        didSet {
+            commentsTableView.letIt {
+                $0.dataSource = self
+                $0.register(nibTypes: [CommentsTableViewCell.self, LoadingTableViewCell.self])
+                $0.estimatedRowHeight = Constant.commentsTableViewCellHeight
+                $0.rowHeight = UITableView.automaticDimension
+            }
+        }
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -18,12 +30,26 @@ class AllCommentsViewController: BaseViewController {
     }
     
     // MARK: - Binding View Model
-    private func bindingViewModel(){
-        viewModel.fetchCommentsRequestValue.movieId = movieId
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.comments.observe(on: self) { [weak self] in self?.updateComments($0) }
-        viewModel.load()
+    private func bindingViewModel() {
+        let input = AllCommentsViewModel.Input(
+            firstTimeLoad: Driver.just(()),
+            loadMoreTrigger: loadMoreTrigger.asDriverOnErrorJustComplete(),
+            movieId: Driver.just(self.movieId)
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loadingState.drive { [weak self] state in
+            self?.updateLoadingState(state)
+        }.disposed(by: disposeBag)
+        
+        output.error.drive { [weak self] error in
+            self?.showError(error)
+        }.disposed(by: disposeBag)
+        
+        output.comments.drive {[weak self] comments in
+            self?.updateComments(comments)
+        }.disposed(by: disposeBag)
     }
     
     private func updateComments(_ comments: [Comment]) {
@@ -35,18 +61,7 @@ class AllCommentsViewController: BaseViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        setupTableView()
         setupNavigationBar(title: "All Comments")
-    }
-    
-    private func setupTableView(){
-        commentsTableView.dataSource = self
-        let movieCellNib = UINib(nibName: movieCellNibName, bundle: nil)
-        let loadingCellNib = UINib(nibName: loadingCellNibName, bundle: nil)
-        commentsTableView.register(movieCellNib, forCellReuseIdentifier: movieCellNibName)
-        commentsTableView.register(loadingCellNib, forCellReuseIdentifier: loadingCellNibName)
-        commentsTableView.estimatedRowHeight = Constant.commentsTableViewCellHeight
-        commentsTableView.rowHeight = UITableView.automaticDimension
     }
 }
 
@@ -60,22 +75,21 @@ extension AllCommentsViewController : UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 1, let loadingCell =  tableView.dequeueReusableCell(withIdentifier: loadingCellNibName, for: indexPath) as? LoadingTableViewCell
-        { return loadingCell }
+        if indexPath.section == 1 {
+            return tableView.dequeueReusableCell(with: LoadingTableViewCell.self,for: indexPath)
+        }
         
-        guard let cell =  tableView.dequeueReusableCell(withIdentifier: movieCellNibName, for: indexPath) as? CommentsTableViewCell
-        else { return UITableViewCell() }
-        
+        let cell =  tableView.dequeueReusableCell(with: CommentsTableViewCell.self, for: indexPath)
         let comment = comments[indexPath.row]
-        cell.usernameLabel.text = comment.user.username
         cell.commentLabel.text = comment.content
         cell.avatarImageView.kf.setImage(with: URL(string: comment.user.avatar))
+        cell.usernameLabel.text = comment.user.username
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            viewModel.loadMore()
+            loadMoreTrigger.onNext(())
         }
     }
     

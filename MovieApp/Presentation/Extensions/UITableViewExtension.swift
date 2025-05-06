@@ -77,3 +77,62 @@ extension UITableView {
         self.backgroundView = nil
     }
 }
+
+extension UITableView {
+    func register(cellType: UITableViewCell.Type) {
+        let className = cellType.className
+        register(cellType, forCellReuseIdentifier: className)
+    }
+
+    func register(cellTypes: [UITableViewCell.Type]) {
+        cellTypes.forEach { register(cellType: $0) }
+    }
+    
+    func register(nibType: UITableViewCell.Type) {
+        let className = nibType.className
+        let nib = UINib(nibName: className, bundle: nil)
+        register(nib, forCellReuseIdentifier: className)
+    }
+    
+    func register(nibTypes: [UITableViewCell.Type]) {
+        nibTypes.forEach { register(nibType: $0) }
+    }
+    
+    func dequeueReusableCell<T: UITableViewCell>(with type: T.Type, for indexPath: IndexPath) -> T {
+        dequeueReusableCell(withIdentifier: type.className, for: indexPath) as! T
+    }
+}
+
+public extension UITableView {
+    func tableHeaderViewSizeToFit() {
+        tableHeaderOrFooterViewSizeToFit(\.tableHeaderView)
+    }
+
+    func tableFooterViewSizeToFit() {
+        tableHeaderOrFooterViewSizeToFit(\.tableFooterView)
+    }
+
+    private func tableHeaderOrFooterViewSizeToFit(_ keyPath: ReferenceWritableKeyPath<UITableView, UIView?>) {
+        guard let headerOrFooterView = self[keyPath: keyPath] else { return }
+        let height = headerOrFooterView
+            .systemLayoutSizeFitting(CGSize(width: frame.width, height: 0),
+                                     withHorizontalFittingPriority: .required,
+                                     verticalFittingPriority: .fittingSizeLevel).height
+        guard headerOrFooterView.frame.height != height else { return }
+        headerOrFooterView.frame.size.height = height
+        self[keyPath: keyPath] = headerOrFooterView
+    }
+
+    func deselectSelectedRow(animated: Bool) {
+        guard let indexPathForSelectedRow = indexPathForSelectedRow else { return }
+        deselectRow(at: indexPathForSelectedRow, animated: animated)
+    }
+
+    func reloadData(_ completion: @escaping () -> Void) {
+        UIView.animate(withDuration: 0, animations: {
+            self.reloadData()
+        }, completion: { _ in
+            completion()
+        })
+    }
+}

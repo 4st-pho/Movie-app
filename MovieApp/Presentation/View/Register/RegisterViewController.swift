@@ -1,4 +1,7 @@
 import UIKit
+import RxSwift
+import RxCocoa
+
 
 class RegisterViewController: BaseViewController {
     // MARK: - Variables
@@ -40,17 +43,35 @@ class RegisterViewController: BaseViewController {
     
     // MARK: - Binding view model
     private func binding(){
-        viewModel.error.observe(on: self){[weak self] in self?.showError($0)}
-        viewModel.loadingState.observe(on: self){[weak self] in self?.updateLoadingState($0)}
-        viewModel.successMessage.observe(on: self){[weak self] in self?.handleRegistrationSuccess($0)}
-        viewModel.load()
+        let registerData = Driver.combineLatest(
+            usernameTextField.rx.text.orEmpty.asDriverOnErrorJustComplete(),
+            emailTextField.rx.text.orEmpty.asDriverOnErrorJustComplete(),
+            passwordTextField.rx.text.orEmpty.asDriverOnErrorJustComplete(),
+            confirmPasswordTextField.rx.text.orEmpty.asDriverOnErrorJustComplete()
+        ) {(username: $0, email: $1, password: $2, comfirmPassword: $3)}
+        
+        let input = RegisterViewModel.Input(
+            registerData: registerData,
+            registerTrigger: loginButton.rx.tap.asDriverOnErrorJustComplete())
+        
+        let output = viewModel.transform(input: input)
+        output.loadingState.drive { [weak self] state in
+            self?.updateLoadingState(state)
+        }.disposed(by: disposeBag)
+        
+        output.error.drive { [weak self] error in
+            self?.showError(error)
+        }.disposed(by: disposeBag)
+        
+        output.successMessage.drive { [weak self] value in
+            self?.handleRegistrationSuccess(value)
+        }.disposed(by: disposeBag)
     }
     
     private func handleRegistrationSuccess(_ message: String) {
         guard !message.isEmpty else { return }
         showAlert(title: "Success", message: message) {
         } alertActionHanler: { [weak self] _ in
-            
             self?.navigationController?.popViewController(animated: true)
         }
     }
@@ -74,25 +95,6 @@ class RegisterViewController: BaseViewController {
     }
     
     // MARK: - Functions
-    private func Register(){
-        let email = (emailTextField.text ?? "").trim()
-        let username = (usernameTextField.text ?? "").trim()
-        let password = (passwordTextField.text ?? "").trim()
-        let confirmPassword = (confirmPasswordTextField.text ?? "").trim()
-        let isValidInput = !email.isEmpty && !password.isEmpty && !username.isEmpty && !confirmPassword.isEmpty
-        
-        if !isValidInput {
-            showError("Invalid input")
-            return
-        }
-        if !(passwordTextField.text == confirmPasswordTextField.text) {
-            showError("Password not match confirm password")
-            return
-        }
-        
-        viewModel.register(email: email, username: username, password: password)
-        
-    }
     
     // MARK: - Actions
     @IBAction func emailDidEndOnExit(_ sender: Any) {
@@ -107,12 +109,10 @@ class RegisterViewController: BaseViewController {
     }
     
     @IBAction func confirmPasswordDidEndOnExit(_ sender: Any) {
-        Register()
         view.endEditing(true)
     }
     
     @IBAction func loginButtonTouchUpInside(_ sender: Any) {
-        Register()
         view.endEditing(true)
     }
     

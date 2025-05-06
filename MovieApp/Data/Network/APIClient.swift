@@ -5,7 +5,7 @@ struct APIError: Error, Decodable {
     var code: Int?
     let errors: [String: String]?
     let errorCode: Int?
-    var localizedDescription: String {
+    public var localizedDescription: String {
         let errorMessage = message ?? "Something went wrong please try again"
         return errorMessage
     }
@@ -13,11 +13,8 @@ struct APIError: Error, Decodable {
 
 
 class APIClient {
-    static let shared = APIClient()
     let userCache = UserStorage()
     private let baseURL = AppConfiguration.apiBaseURL
-    
-    private init() {}
     
     private let sessionManager: Session = {
         let configuration = URLSessionConfiguration.default

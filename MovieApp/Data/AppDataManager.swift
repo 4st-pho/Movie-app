@@ -5,11 +5,6 @@ class AppDataManager {
     private let userCached = UserStorage()
     private var watchListIds: [String] = []
     private static let privateInstance = AppDataManager()
-    static var shared : AppDataManager {
-        return privateInstance
-    }
-    
-    private init() {}
     
     func initialize(){
         let user = userCached.load()?.toDomain()

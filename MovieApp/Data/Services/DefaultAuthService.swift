@@ -5,7 +5,7 @@ final class DefaultAuthService {
     private let apiClient: APIClient
     private let cache: UserStorage
     
-    init(apiClient: APIClient = APIClient.shared, cache: UserStorage = UserStorage()) {
+    init(apiClient: APIClient, cache: UserStorage) {
         self.apiClient = apiClient
         self.cache = cache
     }

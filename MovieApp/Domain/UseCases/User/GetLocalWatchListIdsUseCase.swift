@@ -1,16 +1,21 @@
 import Foundation
+import RxSwift
 
 protocol GetLocalWatchListIdsUseCase {
-    func execute() -> [String]
+    func execute() -> Observable<[String]>
 }
 
 final class DefaultGetLocalWatchListIdsUseCase: GetLocalWatchListIdsUseCase {
-    private let appData: AppDataManager
-    init(appData: AppDataManager = AppDataManager.shared) {
-        self.appData = appData
+    func execute() -> Observable<[String]> {
+        return Observable.create { [weak self] signal in
+            let data = self?.appData.getsWatchListIds() ?? []
+            signal.onNext(data)
+            return Disposables.create()
+        }
     }
-
-    func execute() -> [String] {
-        return appData.getsWatchListIds()
+    
+    private let appData: AppDataManager
+    init(appData: AppDataManager) {
+        self.appData = appData
     }
 }

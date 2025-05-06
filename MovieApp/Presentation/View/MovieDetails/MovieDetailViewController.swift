@@ -2,28 +2,28 @@ import UIKit
 import Kingfisher
 import AVKit
 import AVFoundation
+import RxSwift
+import RxCocoa
 
 class MovieDetailViewController: BaseViewController {
     // MARK: - Variables
-    var movie: Movie! {
-        didSet {
-            viewModel.loadComments(movieId: movie.id)
-        }
-    }
+    var movie: Movie!
     private var comments: [Comment] = []
-    private let categoryCellNibName = String(describing: CategoryCollectionViewCell.self)
-    private let castCellNibName = String(describing: CastCollectionViewCell.self)
     private let viewModel = MovieDetailViewModel()
-    private let commentsCellNibName = String(describing: CommentsTableViewCell.self)
     private lazy var videoPlayer : VideoPlayer = .fromNib()
     private lazy var castCellWidth = (castCollectionView.frame.width - Constant.edgePadding * 2 - Constant.lineSpacing * 3) / 4
     private lazy var castCellHeight = castCellWidth + 40
+    private var checkLoggedInTriger = PublishRelay<Void>()
+    private var loadCommentsTrigger = PublishRelay<String>()
+    private var addCommentsTrigger = PublishRelay<(movieId: String, content: String)>()
+    private var toggleSaveToWatchListTriger = PublishRelay<(String, MovieDetailViewModel.WatchListAction)>()
+    private var isLoggedIn = BehaviorRelay<Bool>(value: false)
+    private var isMovieInWatchList = false
     
     // MARK: - Outlets
     @IBOutlet private(set) weak var commentTextField: AutoChangePositionTextField!
     @IBOutlet private(set) weak var commentsTableViewHeight: NSLayoutConstraint!
     @IBOutlet private(set) weak var castCollectionViewHeight: NSLayoutConstraint!
-    @IBOutlet private(set) weak var commentsTableView: UITableView!
     @IBOutlet private(set) weak var bookmarkButton: UIButton!
     @IBOutlet private(set) weak var headerMaskView: UIView!
     @IBOutlet private(set) weak var videoPlayBackView: UIView!
@@ -35,11 +35,36 @@ class MovieDetailViewController: BaseViewController {
     @IBOutlet private(set) weak var movieNameLabel: UILabel!
     @IBOutlet private(set) weak var seeMoreCommentsButton: UIButton!
     @IBOutlet private(set) weak var seeMoreCastButton: UIButton!
-    @IBOutlet private(set) weak var categoryColectionView: UICollectionView!
     @IBOutlet private(set) weak var movieBodyView: UIView!
     @IBOutlet private(set) weak var movieImageView: UIImageView!
     @IBOutlet private(set) weak var categoryColectionViewHeight: NSLayoutConstraint!
-    @IBOutlet private(set) weak var castCollectionView: UICollectionView!
+    @IBOutlet private(set) weak var commentsTableView: UITableView! {
+        didSet {
+            commentsTableView.letIt {
+                $0.estimatedRowHeight = Constant.commentsTableViewCellHeight
+                $0.rowHeight = UITableView.automaticDimension
+                $0.register(nibType: CommentsTableViewCell.self)
+            }
+        }
+    }
+    @IBOutlet private(set) weak var castCollectionView: UICollectionView! {
+        didSet {
+            castCollectionView.letIt {
+                $0.delegate = self
+                $0.dataSource = self
+                $0.register(nibType: CastCollectionViewCell.self)
+            }
+        }
+    }
+    @IBOutlet private(set) weak var categoryColectionView: UICollectionView! {
+        didSet {
+            categoryColectionView.letIt {
+                $0.delegate = self
+                $0.dataSource = self
+                $0.register(nibType: CategoryCollectionViewCell.self)
+            }
+        }
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -66,20 +91,44 @@ class MovieDetailViewController: BaseViewController {
     
     // MARK: - Binding View Model
     private func bindingViewModel(){
-        viewModel.loadingState.observe(on: self) { [weak self] in self?.updateLoadingState($0) }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
-        viewModel.comments.observe(on: self) { [weak self] in self?.updateComments($0) }
-        viewModel.load()
-    }
-    
-    func updateComments(_ comments: [Comment]) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.comments = comments
-            commentsTableView.reloadData()
-            commentsTableViewHeight.constant = commentsTableView.contentSize.height
-            viewDidLayoutSubviews()
-        }
+        
+        let input = MovieDetailViewModel.Input(
+            checLoggedIn: checkLoggedInTriger.asDriverOnErrorJustComplete(),
+            toggleSaveToWatchList: toggleSaveToWatchListTriger.asDriverOnErrorJustComplete(),
+            checkMovieContainInWatchList: .just(movie.id),
+            loadCommentsTrigger: loadCommentsTrigger.asDriverOnErrorJustComplete(),
+            addCommentsTrigger: addCommentsTrigger.asDriverOnErrorJustComplete()
+        )
+        
+        let output = viewModel.transform(input: input)
+        output.loadingState
+            .drive{ [weak self] in self?.updateLoadingState($0) }.disposed(by: disposeBag)
+        output.error
+            .drive{ [weak self] in self?.showError($0) }.disposed(by: disposeBag)
+        output.isLoggedIn
+            .drive(isLoggedIn).disposed(by: disposeBag)
+        output.isMovieInWatchList
+            .drive{ [weak self] in
+            self?.isMovieInWatchList = $0
+            self?.bookmarkButton.isSelected = $0
+        }.disposed(by: disposeBag)
+        output.toggleSaveToWatchListCompletion
+            .drive { [weak self] action in
+            self?.bookmarkButton.isSelected.toggle()
+        }.disposed(by: disposeBag)
+        
+        output.comments
+            .drive(commentsTableView.rx.items) { tableView, index, element in
+                let indexPath = IndexPath(row: index, section: 0)
+                let cell = tableView.dequeueReusableCell(with: CommentsTableViewCell.self, for: indexPath)
+                cell.usernameLabel.text = element.user.username
+                cell.commentLabel.text = element.content
+                cell.avatarImageView.kf.setImage(with: URL(string: element.user.avatar))
+                return cell
+            }
+            .disposed(by: disposeBag)
+        commentsTableView.rx.bindContentHeight(to: commentsTableViewHeight).disposed(by: disposeBag)
+        loadCommentsTrigger.accept(movie.id)
     }
 
     // MARK: - UI Setup
@@ -98,8 +147,6 @@ class MovieDetailViewController: BaseViewController {
     
     private func setupUI() {
         customOutlets()
-        setupCollectionView()
-        setupTableView()
         updateViewComponentData()
     }
     
@@ -112,34 +159,10 @@ class MovieDetailViewController: BaseViewController {
         descriptionLabel.text = movie.description
     }
     
-    private func setupTableView() {
-        commentsTableView.dataSource = self
-        commentsTableView.delegate = self
-        
-        commentsTableView.estimatedRowHeight = Constant.commentsTableViewCellHeight
-        commentsTableView.rowHeight = UITableView.automaticDimension
-        let nib = UINib(nibName: commentsCellNibName, bundle: nil)
-        commentsTableView.register(nib, forCellReuseIdentifier: commentsCellNibName)
-    }
-    
-    private func setupCollectionView() {
-        categoryColectionView.dataSource = self
-        categoryColectionView.delegate = self
-        castCollectionView.dataSource = self
-        castCollectionView.delegate = self
-        
-        let layout = TagFlowLayout()
-        categoryColectionView.collectionViewLayout = layout
-        let categoryCellNib = UINib(nibName: categoryCellNibName, bundle: nil)
-        categoryColectionView.register(categoryCellNib, forCellWithReuseIdentifier: categoryCellNibName)
-        let castCellNib = UINib(nibName: castCellNibName, bundle: nil)
-        castCollectionView.register(castCellNib, forCellWithReuseIdentifier: castCellNibName)
-    }
-    
     private func customOutlets() {
         self.seeMoreCastButton.applyCustomStyle(style: .outline)
         self.seeMoreCommentsButton.applyCustomStyle(style: .outline)
-        bookmarkButton.isSelected = viewModel.isMovieInWatchList(movieId: movie.id)
+        bookmarkButton.isSelected = isMovieInWatchList
         if !(movie?.imageUrl ?? "").isEmpty{
             let imageUrl = URL(string: movie?.imageUrl ?? "")
             self.movieImageView.kf.setImage(with: imageUrl)
@@ -157,8 +180,8 @@ class MovieDetailViewController: BaseViewController {
     
     // MARK: - Actions
     @IBAction func playBackButtonTapped(_ sender: Any) {
-        viewModel.checkLoggedIn() { [weak self] in
-            guard let self  = self else { return }
+        checkLoggedInTriger.accept(())
+        if isLoggedIn.value {
             guard let url = URL(string: self.movie.videoLink) else {return}
             setupVideoPlayerView()
             videoPlayer.isToShowPlaybackControls = true
@@ -169,11 +192,11 @@ class MovieDetailViewController: BaseViewController {
     }
     
     @IBAction func commentTextFieldDidEndOnExit(_ sender: Any) {
-        viewModel.checkLoggedIn() { [weak self] in
-            guard let self  = self else { return }
+        checkLoggedInTriger.accept(())
+        if isLoggedIn.value {
             guard let content  = commentTextField.text?.trim(), !content.isEmpty else { return }
             commentTextField.text = ""
-            viewModel.addComment(movieId: movie.id, content: content)
+            addCommentsTrigger.accept((movie.id, content))
         }
     }
     
@@ -190,10 +213,7 @@ class MovieDetailViewController: BaseViewController {
     }
     
     @IBAction func bookmarkButtonTouchUpInside(_ sender: Any) {
-        viewModel.toggleSaveToWatchList(movieId: movie.id, action: bookmarkButton.isSelected ? .remove : .add) { [weak self] in
-            guard let self = self else { return }
-            bookmarkButton.isSelected.toggle()
-        }
+        toggleSaveToWatchListTriger.accept((movie.id, bookmarkButton.isSelected ? .remove : .add))
     }
     
 }
@@ -212,18 +232,14 @@ extension MovieDetailViewController : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == categoryColectionView{
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: categoryCellNibName, for: indexPath) as? CategoryCollectionViewCell
-            {
-                cell.categoryLabel.text = self.movie.categories[indexPath.row].uppercased()
-                return cell
-            }
+            let cell = collectionView.dequeueReusableCell(with: CategoryCollectionViewCell.self, for: indexPath)
+            cell.categoryLabel.text = self.movie.categories[indexPath.row].uppercased()
+            return cell
         } else if collectionView == castCollectionView{
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: castCellNibName, for: indexPath) as? CastCollectionViewCell
-            {
-                let cast = self.movie.cast[indexPath.row]
-                cell.updateDataOfCell(actorName: cast.name , imageUrl: cast.avatar)
-                return cell
-            }
+            let cell = collectionView.dequeueReusableCell(with: CastCollectionViewCell.self, for: indexPath)
+            let cast = self.movie.cast[indexPath.row]
+            cell.updateDataOfCell(actorName: cast.name , imageUrl: cast.avatar)
+            return cell
         }
         return UICollectionViewCell()
     }
@@ -261,23 +277,6 @@ extension MovieDetailViewController : UICollectionViewDelegateFlowLayout {
 extension MovieDetailViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
-    }
-}
-
-// MARK: - Movie Details Table Data Source
-extension MovieDetailViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.comments.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: commentsCellNibName, for: indexPath) as? CommentsTableViewCell else { return UITableViewCell()}
-        let comment = comments[indexPath.row]
-        cell.usernameLabel.text = comment.user.username
-        cell.commentLabel.text = comment.content
-        cell.avatarImageView.kf.setImage(with: URL(string: comment.user.avatar))
-        return cell
     }
 }
 

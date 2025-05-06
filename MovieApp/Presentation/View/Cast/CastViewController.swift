@@ -1,12 +1,25 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class CastViewController: BaseViewController {
     // MARK: - Variables
-    var cast: [Actor]!
-    private let castCellNibName = String(describing: CastCollectionViewCell.self)
+    var cast: [Actor]! {
+        didSet {
+            castRelay.accept(cast)
+        }
+    }
+    private let castRelay = BehaviorRelay<[Actor]>(value: [])
     
     // MARK: - Outlets
-    @IBOutlet weak var castCollectionView: UICollectionView!
+    @IBOutlet weak var castCollectionView: UICollectionView! {
+        didSet {
+            castCollectionView.letIt {
+                $0.delegate = self
+                $0.register(nibType: CastCollectionViewCell.self)
+            }
+        }
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -16,31 +29,16 @@ class CastViewController: BaseViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        setupCollectionView()
         setupNavigationBar(title: "Cast")
-    }
-    
-    private func setupCollectionView() {
-        self.castCollectionView.dataSource = self
-        self.castCollectionView.delegate = self
-        let castCellNib = UINib(nibName: castCellNibName, bundle: nil)
-        self.castCollectionView.register(castCellNib, forCellWithReuseIdentifier: castCellNibName)
-    }
-}
-
-extension CastViewController : UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cast.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: castCellNibName, for: indexPath) as? CastCollectionViewCell
-        {
-            let actor = cast[indexPath.row]
-            cell.updateDataOfCell(actorName: actor.name, imageUrl: actor.avatar)
-            return cell
-        }
-        return UICollectionViewCell()
+        castRelay
+            .asDriver()
+            .drive(castCollectionView.rx.items) { collectionView, index, element in
+                let indexPath = IndexPath(row: index, section: 0)
+                let cell = collectionView.dequeueReusableCell(with: CastCollectionViewCell.self, for: indexPath)
+                cell.updateDataOfCell(actorName: element.name, imageUrl: element.avatar)
+                return cell
+            }
+            .disposed(by: disposeBag)
     }
 }
 

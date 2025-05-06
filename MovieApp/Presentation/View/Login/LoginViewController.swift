@@ -28,15 +28,26 @@ class LoginViewController: BaseViewController {
     }
     
     // MARK: - Binding View model
-    private func binding(){
-        viewModel.error.observe(on: self){[weak self] in self?.showError($0)}
-        viewModel.loadingState.observe(on: self){[weak self] in self?.updateLoadingState($0)}
-        viewModel.reloadApp.observe(on: self) { hasReload in
-            if hasReload{
-                Utils.resetRootView()
-            }
-        }
-        viewModel.load()
+    private func binding() {
+        let input = LoginViewModel.Input(
+            email: emailTextField.rx.text.orEmpty.asDriverOnErrorJustComplete(),
+            password: passwordTextField.rx.text.orEmpty.asDriverOnErrorJustComplete(),
+            loginTrigger: LoginButton.rx.tap.asDriverOnErrorJustComplete()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loadingState.drive { [weak self] state in
+            self?.updateLoadingState(state)
+        }.disposed(by: disposeBag)
+        
+        output.error.drive { [weak self] error in
+            self?.showError(error)
+        }.disposed(by: disposeBag)
+        
+        output.reloadApp.emit{ _ in
+            Utils.resetRootView()
+        }.disposed(by: disposeBag)
     }
     
     // MARK: - UI Setup
@@ -52,25 +63,12 @@ class LoginViewController: BaseViewController {
         LoginButton.applyCustomStyle(style: .primary)
     }
     
-    // MARK: - Functions
-    private func loginWithEmailAndPassword(){
-        let email = emailTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        
-        if(email.isEmpty || password.isEmpty){
-            showError("Invalid input")
-            return
-        }
-        viewModel.LoginWithEmailAndPassword(email: email, password: password)
-    }
-    
     // MARK: - Actions
     @IBAction func emailDidEndOnExit(_ sender: Any) {
         passwordTextField.becomeFirstResponder()
     }
     
     @IBAction func passwordDidEndOnExit(_ sender: Any) {
-        loginWithEmailAndPassword()
         view.endEditing(true)
     }
     
@@ -78,10 +76,6 @@ class LoginViewController: BaseViewController {
         navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
     
-    @IBAction func signInButtonTouchUpInside(_ sender: Any) {
-        loginWithEmailAndPassword()
-        view.endEditing(true)
-    }
     
     // MARK: - Selectors
     @objc private func showHideButtonTapped(){
