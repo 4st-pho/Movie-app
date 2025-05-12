@@ -22,6 +22,15 @@
 		6D48970A2DADF63700657BE5 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4897092DADF63700657BE5 /* BaseViewModel.swift */; };
 		6D48970C2DADF66000657BE5 /* ViewModelTransformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D48970B2DADF66000657BE5 /* ViewModelTransformable.swift */; };
 		6D4A8BAD2DAE4872008A5BA0 /* Rxswift+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A8BAC2DAE4872008A5BA0 /* Rxswift+Extension.swift */; };
+		6DCE22292DD18B0700756708 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22282DD18B0700756708 /* LoginView.swift */; };
+		6DCE222C2DD18C6700756708 /* AppTextFiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE222B2DD18C6700756708 /* AppTextFiledView.swift */; };
+		6DCE222F2DD1915400756708 /* SizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE222E2DD1915400756708 /* SizeView.swift */; };
+		6DCE22312DD1939B00756708 /* PrimaryButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22302DD1939B00756708 /* PrimaryButtonStyle.swift */; };
+		6DCE22382DD1B26500756708 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22372DD1B26500756708 /* View+.swift */; };
+		6DCE223A2DD1B2AB00756708 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22392DD1B2AB00756708 /* LoginViewModel.swift */; };
+		6DCE22412DD1F10400756708 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22402DD1F10400756708 /* RegisterView.swift */; };
+		6DCE22432DD1F23600756708 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22422DD1F23600756708 /* RegisterViewModel.swift */; };
+		6DCE22452DD1FC7400756708 /* Navigation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE22442DD1FC7400756708 /* Navigation+.swift */; };
 		8405503A2B22A7D400C2E9CA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840550392B22A7D400C2E9CA /* AuthService.swift */; };
 		8405503E2B22A92200C2E9CA /* DefaultAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405503D2B22A92200C2E9CA /* DefaultAuthService.swift */; };
 		840EEB6F2B2052200004BC1B /* LoggedInMiddlewareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840EEB6E2B2052200004BC1B /* LoggedInMiddlewareView.xib */; };
@@ -70,8 +79,6 @@
 		8452FF7A2B21A2DD00B2A1D0 /* SideMenuAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8452FF792B21A2DD00B2A1D0 /* SideMenuAnimation.swift */; };
 		8452FF7C2B21A31200B2A1D0 /* SideMenuTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8452FF7B2B21A31200B2A1D0 /* SideMenuTransitionManager.swift */; };
 		8454F6E12B0C8323006B69AD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8454F6E02B0C8323006B69AD /* HomeViewModel.swift */; };
-		845720C02B16D0D200EC584C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845720BE2B16D0D200EC584C /* LoginViewController.swift */; };
-		845720C12B16D0D200EC584C /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 845720BF2B16D0D200EC584C /* LoginViewController.xib */; };
 		845720C42B171DF500EC584C /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845720C32B171DF500EC584C /* VideoController.swift */; };
 		845720C82B17494900EC584C /* VideoPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 845720C62B17494900EC584C /* VideoPlayer.xib */; };
 		845720C92B17494900EC584C /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845720C72B17494900EC584C /* VideoPlayer.swift */; };
@@ -117,10 +124,6 @@
 		84EAC3712B2AEFF00001B892 /* UpdateUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EAC3702B2AEFF00001B892 /* UpdateUserUseCase.swift */; };
 		84FB932E2B1972DF00355BAB /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB932D2B1972DF00355BAB /* UITextFieldExtension.swift */; };
 		84FB93302B198F0E00355BAB /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB932F2B198F0E00355BAB /* AppTheme.swift */; };
-		84FB93362B19997000355BAB /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB93342B19997000355BAB /* RegisterViewController.swift */; };
-		84FB93372B19997000355BAB /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84FB93352B19997000355BAB /* RegisterViewController.xib */; };
-		84FB93392B19C4D300355BAB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB93382B19C4D300355BAB /* LoginViewModel.swift */; };
-		84FB933D2B19D85600355BAB /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB933C2B19D85600355BAB /* RegisterViewModel.swift */; };
 		84FB93412B19D8FE00355BAB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB93402B19D8FE00355BAB /* User.swift */; };
 		9108A5912B29313D0048B01A /* OnboardingItem2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9108A58F2B29313D0048B01A /* OnboardingItem2ViewController.swift */; };
 		9108A5922B29313D0048B01A /* OnboardingItem2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9108A5902B29313D0048B01A /* OnboardingItem2ViewController.xib */; };
@@ -181,6 +184,15 @@
 		6D4897092DADF63700657BE5 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		6D48970B2DADF66000657BE5 /* ViewModelTransformable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTransformable.swift; sourceTree = "<group>"; };
 		6D4A8BAC2DAE4872008A5BA0 /* Rxswift+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rxswift+Extension.swift"; sourceTree = "<group>"; };
+		6DCE22282DD18B0700756708 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		6DCE222B2DD18C6700756708 /* AppTextFiledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextFiledView.swift; sourceTree = "<group>"; };
+		6DCE222E2DD1915400756708 /* SizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeView.swift; sourceTree = "<group>"; };
+		6DCE22302DD1939B00756708 /* PrimaryButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonStyle.swift; sourceTree = "<group>"; };
+		6DCE22372DD1B26500756708 /* View+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
+		6DCE22392DD1B2AB00756708 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		6DCE22402DD1F10400756708 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		6DCE22422DD1F23600756708 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		6DCE22442DD1FC7400756708 /* Navigation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Navigation+.swift"; sourceTree = "<group>"; };
 		840550392B22A7D400C2E9CA /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		8405503D2B22A92200C2E9CA /* DefaultAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAuthService.swift; sourceTree = "<group>"; };
 		840EEB6E2B2052200004BC1B /* LoggedInMiddlewareView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoggedInMiddlewareView.xib; sourceTree = "<group>"; };
@@ -231,8 +243,6 @@
 		8452FF792B21A2DD00B2A1D0 /* SideMenuAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuAnimation.swift; sourceTree = "<group>"; };
 		8452FF7B2B21A31200B2A1D0 /* SideMenuTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuTransitionManager.swift; sourceTree = "<group>"; };
 		8454F6E02B0C8323006B69AD /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		845720BE2B16D0D200EC584C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		845720BF2B16D0D200EC584C /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		845720C32B171DF500EC584C /* VideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
 		845720C62B17494900EC584C /* VideoPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoPlayer.xib; sourceTree = "<group>"; };
 		845720C72B17494900EC584C /* VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
@@ -278,10 +288,6 @@
 		84EAC3702B2AEFF00001B892 /* UpdateUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserUseCase.swift; sourceTree = "<group>"; };
 		84FB932D2B1972DF00355BAB /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		84FB932F2B198F0E00355BAB /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
-		84FB93342B19997000355BAB /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		84FB93352B19997000355BAB /* RegisterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
-		84FB93382B19C4D300355BAB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		84FB933C2B19D85600355BAB /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		84FB93402B19D8FE00355BAB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8C03647C2AC82D840E4661AA /* Pods-MovieApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp.debug.xcconfig"; path = "Target Support Files/Pods-MovieApp/Pods-MovieApp.debug.xcconfig"; sourceTree = "<group>"; };
 		9108A58F2B29313D0048B01A /* OnboardingItem2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItem2ViewController.swift; sourceTree = "<group>"; };
@@ -375,6 +381,44 @@
 				9F4BB5983A28FE07B5292664 /* Pods-MovieApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		6DCE22272DD188D200756708 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				6DCE223C2DD1E72D00756708 /* Core */,
+				6DCE22362DD1B24C00756708 /* Extensions */,
+				6DCE222A2DD18C5500756708 /* UIConponents */,
+				845720BD2B16CCDB00EC584C /* Login */,
+				84FB93312B19994000355BAB /* Register */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
+		6DCE222A2DD18C5500756708 /* UIConponents */ = {
+			isa = PBXGroup;
+			children = (
+				6DCE222B2DD18C6700756708 /* AppTextFiledView.swift */,
+				6DCE222E2DD1915400756708 /* SizeView.swift */,
+				6DCE22302DD1939B00756708 /* PrimaryButtonStyle.swift */,
+			);
+			path = UIConponents;
+			sourceTree = "<group>";
+		};
+		6DCE22362DD1B24C00756708 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6DCE22372DD1B26500756708 /* View+.swift */,
+				6DCE22442DD1FC7400756708 /* Navigation+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6DCE223C2DD1E72D00756708 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		8405503C2B22A90400C2E9CA /* Services */ = {
@@ -633,6 +677,7 @@
 		845720BC2B16CC8C00EC584C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6DCE22272DD188D200756708 /* SwiftUI */,
 				843D67FD2B32DE660086A026 /* AllComments */,
 				8491AD6E2B319EFB002D0F9C /* Cast */,
 				849BA5372B2993D400A2F14C /* UserProfile */,
@@ -643,8 +688,6 @@
 				844DA1212AF34DDE00C5F562 /* Home */,
 				844DA1202AF34DCF00C5F562 /* MainTabBarController */,
 				84912C9C2B0EE9A400DBF2E3 /* MovieDetails */,
-				845720BD2B16CCDB00EC584C /* Login */,
-				84FB93312B19994000355BAB /* Register */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -652,9 +695,8 @@
 		845720BD2B16CCDB00EC584C /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				845720BE2B16D0D200EC584C /* LoginViewController.swift */,
-				845720BF2B16D0D200EC584C /* LoginViewController.xib */,
-				84FB93382B19C4D300355BAB /* LoginViewModel.swift */,
+				6DCE22282DD18B0700756708 /* LoginView.swift */,
+				6DCE22392DD1B2AB00756708 /* LoginViewModel.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -803,9 +845,8 @@
 		84FB93312B19994000355BAB /* Register */ = {
 			isa = PBXGroup;
 			children = (
-				84FB93342B19997000355BAB /* RegisterViewController.swift */,
-				84FB93352B19997000355BAB /* RegisterViewController.xib */,
-				84FB933C2B19D85600355BAB /* RegisterViewModel.swift */,
+				6DCE22402DD1F10400756708 /* RegisterView.swift */,
+				6DCE22422DD1F23600756708 /* RegisterViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1163,10 +1204,8 @@
 				842357202B0DBB8200A2CA44 /* CategoryCollectionViewCell.xib in Resources */,
 				84AE4E3F2B071D270094F93F /* SecretKey.plist in Resources */,
 				91D435772B23811E0045F3A9 /* VerticelMovieCollectionViewCell.xib in Resources */,
-				84FB93372B19997000355BAB /* RegisterViewController.xib in Resources */,
 				8491AD722B319F2C002D0F9C /* CastViewController.xib in Resources */,
 				9108A5922B29313D0048B01A /* OnboardingItem2ViewController.xib in Resources */,
-				845720C12B16D0D200EC584C /* LoginViewController.xib in Resources */,
 				84A4A5FB2B1EC30600E7E137 /* OnboardingItem1ViewController.xib in Resources */,
 				843F22932AF37F54004252D8 /* WatchListViewController.xib in Resources */,
 				8447A95C2B20037400B4D4AF /* EmptyListView.xib in Resources */,
@@ -1244,7 +1283,6 @@
 				6D4897052DACE8F900657BE5 /* AppDIContainer.swift in Sources */,
 				840FB8CE2B0C920D0063BBC9 /* UIButtonExtension.swift in Sources */,
 				8452FF6A2B215C0E00B2A1D0 /* SideMenuViewController.swift in Sources */,
-				84FB93392B19C4D300355BAB /* LoginViewModel.swift in Sources */,
 				916D80B82B261A3500C9D174 /* GetCurrentUserUseCase.swift in Sources */,
 				91D435762B23811E0045F3A9 /* VerticelMovieCollectionViewCell.swift in Sources */,
 				8447A9672B20240500B4D4AF /* AppDataManager.swift in Sources */,
@@ -1257,9 +1295,9 @@
 				84EAC3712B2AEFF00001B892 /* UpdateUserUseCase.swift in Sources */,
 				84B7311F2B1F096E00216256 /* Utils.swift in Sources */,
 				843D68052B32EE6B0086A026 /* AllCommentsViewModel.swift in Sources */,
+				6DCE22452DD1FC7400756708 /* Navigation+.swift in Sources */,
 				8447A95E2B20038D00B4D4AF /* EmptyListView.swift in Sources */,
 				916D80BD2B26222F00C9D174 /* AddToWatchListUseCase.swift in Sources */,
-				845720C02B16D0D200EC584C /* LoginViewController.swift in Sources */,
 				5213F2762DC5C56E005C6BF0 /* UICollectionViewExtension.swift in Sources */,
 				6D4A8BAD2DAE4872008A5BA0 /* Rxswift+Extension.swift in Sources */,
 				849BA5362B294E2600A2F14C /* RealmManager.swift in Sources */,
@@ -1269,6 +1307,7 @@
 				91C62A0E2B14E8CA00C85296 /* MoviesDTO+Mapping.swift in Sources */,
 				843D68022B32EA9A0086A026 /* AllCommentsViewController.swift in Sources */,
 				849BA5342B29440500A2F14C /* RealmObject.swift in Sources */,
+				6DCE22412DD1F10400756708 /* RegisterView.swift in Sources */,
 				84912C9F2B0EE9DC00DBF2E3 /* MovieDetailViewController.swift in Sources */,
 				6D48970C2DADF66000657BE5 /* ViewModelTransformable.swift in Sources */,
 				8454F6E12B0C8323006B69AD /* HomeViewModel.swift in Sources */,
@@ -1276,13 +1315,16 @@
 				91C876762B28E94B00FF7D75 /* ExploreMoviesViewController.swift in Sources */,
 				846B692C2B21C06B00AF59DE /* SideMenuViewModel.swift in Sources */,
 				84483C602B0F5BED00A24C17 /* CollectionViewLayoutFlow.swift in Sources */,
+				6DCE223A2DD1B2AB00756708 /* LoginViewModel.swift in Sources */,
+				6DCE222C2DD18C6700756708 /* AppTextFiledView.swift in Sources */,
 				844DA0FD2AF33C8900C5F562 /* AppDelegate.swift in Sources */,
+				6DCE22292DD18B0700756708 /* LoginView.swift in Sources */,
 				919979482B246599006E1BFB /* SearchMoviesUseCase.swift in Sources */,
 				8447A9632B20209E00B4D4AF /* UserStorage.swift in Sources */,
 				845B526B2B18266A006B4BA8 /* NotificationExtension.swift in Sources */,
 				916D80B42B25C1A000C9D174 /* FetchWatchListUseCase.swift in Sources */,
-				84FB933D2B19D85600355BAB /* RegisterViewModel.swift in Sources */,
 				91D435682B2375DD0045F3A9 /* MovieSectionHeader.swift in Sources */,
+				6DCE222F2DD1915400756708 /* SizeView.swift in Sources */,
 				845720C92B17494900EC584C /* VideoPlayer.swift in Sources */,
 				8447A9712B20311B00B4D4AF /* LoggedInMiddlewareView.swift in Sources */,
 				8440E6EA2B29C2C8005764EA /* UserProfileViewModel.swift in Sources */,
@@ -1302,7 +1344,6 @@
 				916D80B22B2589EE00C9D174 /* EmptyResponse.swift in Sources */,
 				91C62A202B150A3A00C85296 /* LoadingView.swift in Sources */,
 				84B731282B1F338200216256 /* UISearchBarExtension.swift in Sources */,
-				84FB93362B19997000355BAB /* RegisterViewController.swift in Sources */,
 				6D4897072DAD0BFA00657BE5 /* ServicesAssembly.swift in Sources */,
 				9108A5912B29313D0048B01A /* OnboardingItem2ViewController.swift in Sources */,
 				849619412B0F2BBA004C11C8 /* UIViewExtension.swift in Sources */,
@@ -1327,6 +1368,7 @@
 				5213F2742DC5C4C0005C6BF0 /* NSObject+.swift in Sources */,
 				916D80C32B262CBE00C9D174 /* GetLocalWatchListIdsUseCase.swift in Sources */,
 				84A6164D2B32A4C50045C24E /* AutoChangePositionTextView.swift in Sources */,
+				6DCE22312DD1939B00756708 /* PrimaryButtonStyle.swift in Sources */,
 				916D80BB2B261C5C00C9D174 /* LoadAppDataUseCase.swift in Sources */,
 				6D4897032DACE8CC00657BE5 /* CoreAssembly.swift in Sources */,
 				8405503E2B22A92200C2E9CA /* DefaultAuthService.swift in Sources */,
@@ -1351,6 +1393,8 @@
 				844DA11A2AF34CD200C5F562 /* HomeViewController.swift in Sources */,
 				8491AD712B319F2C002D0F9C /* CastViewController.swift in Sources */,
 				91C62A172B14F0F300C85296 /* MoviesStorage.swift in Sources */,
+				6DCE22432DD1F23600756708 /* RegisterViewModel.swift in Sources */,
+				6DCE22382DD1B26500756708 /* View+.swift in Sources */,
 				84AE4E3D2B0714350094F93F /* AppAppearance.swift in Sources */,
 				8447A9692B20263C00B4D4AF /* MainTapBarViewModel.swift in Sources */,
 				8447A9602B2006FF00B4D4AF /* UITableViewExtension.swift in Sources */,

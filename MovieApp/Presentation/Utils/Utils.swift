@@ -3,9 +3,14 @@ import UIKit
 
 class Utils{
     static func getKeyWindow() -> UIWindow? {
-        return UIApplication.shared.keyWindow
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return keyWindow
+            }
+        }
+        return nil
     }
-    
+        
     static func isValidEmail(email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
@@ -31,7 +36,7 @@ class Utils{
             let mainTapBarController = MainTabBarController()
             window.rootViewController = mainTapBarController
             let options: UIView.AnimationOptions = .transitionCrossDissolve
-            let duration: TimeInterval = 0.2
+            let duration: TimeInterval = 1
             UIView.transition(with: window, duration: duration, options: options, animations: {}, completion:nil)
         }
     }

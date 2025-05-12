@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SwiftUI
 
 class WatchListViewController: BaseViewController {
     
@@ -128,7 +129,7 @@ extension WatchListViewController : UITableViewDelegate{
 
 extension WatchListViewController: LoggedInMiddlewareViewDelegate{
     func didTapLoginButton() {
-        navigationController?.pushViewController(LoginViewController(), animated: true)
+        navigationController?.pushView(LoginView(), animated: true)
     }
 }
 

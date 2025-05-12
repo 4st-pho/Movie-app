@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 import RxSwift
 
 enum NavigationBarType{
@@ -150,9 +151,9 @@ extension BaseViewController: SideMenuDelegate {
     func sideMenuOptionSelected(_ option: SideMenuModel.SideMenuOption) {
         switch option {
         case .login:
-            navigationController?.pushViewController(LoginViewController(), animated: true)
+            navigationController?.pushView(LoginView(), animated: true)
         case .register:
-            navigationController?.pushViewController(RegisterViewController(), animated: true)
+            navigationController?.pushView(RegisterView(), animated: true)
         case .profile:
             navigationController?.pushViewController(UserProfileViewController(), animated: true)
         case .logout:
