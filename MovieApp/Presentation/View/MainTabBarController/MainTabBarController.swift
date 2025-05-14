@@ -23,7 +23,7 @@ class MainTabBarController: UITabBarController {
     }
     
     private func initTabBar() {
-        let homeVC = HomeViewController()
+        let homeVC = UIViewController()
         let homeNA = UINavigationController(rootViewController: homeVC)
         let searchVC = MovieSearchViewController()
         let searchNA = UINavigationController(rootViewController: searchVC)

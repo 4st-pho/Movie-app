@@ -67,12 +67,13 @@ class ExploreMoviesViewModel: BaseViewModel {
     }
     
     private func fetchMovie(input: Input) -> Observable<(Result<[Movie], Error>, fromCache: Bool)> {
-        switch typeOfMoviesViewRelay.value {
-        case .newest:
-            return self.fetchNewestMoviesUsecase.execute(requestValue: fetchMoviesRequestValue)
-        case .popular:
-            return self.fetchPopularMoviesUsecase.execute(requestValue: fetchMoviesRequestValue)
-        }
+//        switch typeOfMoviesViewRelay.value {
+//        case .newest:
+//            return self.fetchNewestMoviesUsecase.execute(requestValue: fetchMoviesRequestValue)
+//        case .popular:
+//            return self.fetchPopularMoviesUsecase.execute(requestValue: fetchMoviesRequestValue)
+//        }
+        return .empty()
     }
     
     func listenLoadMoreTrigger(input: Input){

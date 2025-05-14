@@ -50,10 +50,10 @@ struct AppTextFiledView: View {
                             } label: {
                                 if isSecured {
                                     Image(systemName: "eye.slash")
-                                        .tint(Color(.appTint))
+                                        .tint(Color(.appTintColor))
                                 } else {
                                     Image(systemName: "eye")
-                                        .tint(Color(.appTint))
+                                        .tint(Color(.appTintColor))
                                 }
                             }
                             

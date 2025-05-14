@@ -10,12 +10,8 @@ import RxSwift
 import Combine
 
 class BaseViewModel: NSObject {
-    var disposeBag: DisposeBag!
+    var disposeBag = DisposeBag()
     var cancellables = Set<AnyCancellable>()
-    
-    override init() {
-        self.disposeBag = DisposeBag()
-    }
     
     func convertToCombinePublisher<T>(observable: Observable<Result<T, Error>>) -> AnyPublisher<Result<T, Error>, Never> {
         return Future<Result<T, Error>, Never> { [weak self] promise in

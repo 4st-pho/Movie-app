@@ -1,4 +1,5 @@
 import Alamofire
+import Foundation
 
 struct APIError: Error, Decodable {
     let message: String?
