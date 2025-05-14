@@ -166,14 +166,10 @@
 		6D55D51D2DD448AF003DE53F /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D51C2DD448AF003DE53F /* RealmSwift */; };
 		6D55D5202DD448B9003DE53F /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D51F2DD448B9003DE53F /* Kingfisher */; };
 		6D55D5232DD448C2003DE53F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5222DD448C2003DE53F /* Alamofire */; };
-		6D55D5252DD448C2003DE53F /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5242DD448C2003DE53F /* AlamofireDynamic */; };
 		6D55D5282DD448CC003DE53F /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5272DD448CC003DE53F /* RxBlocking */; };
-		6D55D52A2DD448CC003DE53F /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5292DD448CC003DE53F /* RxBlocking-Dynamic */; };
 		6D55D52C2DD448CC003DE53F /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D52B2DD448CC003DE53F /* RxCocoa */; };
-		6D55D52E2DD448CC003DE53F /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D52D2DD448CC003DE53F /* RxCocoa-Dynamic */; };
 		6D55D5302DD448CC003DE53F /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D52F2DD448CC003DE53F /* RxRelay */; };
 		6D55D5332DD448D6003DE53F /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5322DD448D6003DE53F /* Swinject */; };
-		6D55D5352DD448D6003DE53F /* Swinject-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D55D5342DD448D6003DE53F /* Swinject-Dynamic */; };
 		6D55D5382DD45340003DE53F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55D5372DD45340003DE53F /* HomeView.swift */; };
 		6D55D53A2DD45393003DE53F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55D5392DD45393003DE53F /* HomeViewModel.swift */; };
 		6D55D53D2DD47C67003DE53F /* HomeMovieHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55D53C2DD47C67003DE53F /* HomeMovieHeader.swift */; };
@@ -355,14 +351,10 @@
 			files = (
 				6D55D5302DD448CC003DE53F /* RxRelay in Frameworks */,
 				6D55D5202DD448B9003DE53F /* Kingfisher in Frameworks */,
-				6D55D52A2DD448CC003DE53F /* RxBlocking-Dynamic in Frameworks */,
 				6D55D5282DD448CC003DE53F /* RxBlocking in Frameworks */,
 				6D55D5232DD448C2003DE53F /* Alamofire in Frameworks */,
 				6D55D5332DD448D6003DE53F /* Swinject in Frameworks */,
-				6D55D52E2DD448CC003DE53F /* RxCocoa-Dynamic in Frameworks */,
-				6D55D5252DD448C2003DE53F /* AlamofireDynamic in Frameworks */,
 				6D55D51D2DD448AF003DE53F /* RealmSwift in Frameworks */,
-				6D55D5352DD448D6003DE53F /* Swinject-Dynamic in Frameworks */,
 				6D55D52C2DD448CC003DE53F /* RxCocoa in Frameworks */,
 				6D55D51B2DD448AF003DE53F /* Realm in Frameworks */,
 			);
@@ -1137,14 +1129,10 @@
 				6D55D51C2DD448AF003DE53F /* RealmSwift */,
 				6D55D51F2DD448B9003DE53F /* Kingfisher */,
 				6D55D5222DD448C2003DE53F /* Alamofire */,
-				6D55D5242DD448C2003DE53F /* AlamofireDynamic */,
 				6D55D5272DD448CC003DE53F /* RxBlocking */,
-				6D55D5292DD448CC003DE53F /* RxBlocking-Dynamic */,
 				6D55D52B2DD448CC003DE53F /* RxCocoa */,
-				6D55D52D2DD448CC003DE53F /* RxCocoa-Dynamic */,
 				6D55D52F2DD448CC003DE53F /* RxRelay */,
 				6D55D5322DD448D6003DE53F /* Swinject */,
-				6D55D5342DD448D6003DE53F /* Swinject-Dynamic */,
 			);
 			productName = MovieApp;
 			productReference = 6D55D3812DD444A4003DE53F /* MovieApp.app */;
@@ -1640,30 +1628,15 @@
 			package = 6D55D5212DD448C2003DE53F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		6D55D5242DD448C2003DE53F /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D55D5212DD448C2003DE53F /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
-		};
 		6D55D5272DD448CC003DE53F /* RxBlocking */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D55D5262DD448CC003DE53F /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxBlocking;
 		};
-		6D55D5292DD448CC003DE53F /* RxBlocking-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D55D5262DD448CC003DE53F /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxBlocking-Dynamic";
-		};
 		6D55D52B2DD448CC003DE53F /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D55D5262DD448CC003DE53F /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
-		};
-		6D55D52D2DD448CC003DE53F /* RxCocoa-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D55D5262DD448CC003DE53F /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
 		};
 		6D55D52F2DD448CC003DE53F /* RxRelay */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1674,11 +1647,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D55D5312DD448D6003DE53F /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
-		};
-		6D55D5342DD448D6003DE53F /* Swinject-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D55D5312DD448D6003DE53F /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = "Swinject-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

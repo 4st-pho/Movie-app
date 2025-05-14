@@ -23,6 +23,11 @@ class HomeViewModel: BaseViewModel, ObservableObject {
     
     override init() {
         super.init()
+        fetchMovies()
+    }
+    
+    func fetchMovies() {
+        isLoading = true
         fetchNewestMoviesUsecase
             .execute(requestValue: fetchNewestMoviesRequestValue)
             .combineLatest(fetchPopularMoviesUsecase.execute(requestValue: fetchPopularMoviesRequestValue))
@@ -40,9 +45,5 @@ class HomeViewModel: BaseViewModel, ObservableObject {
                     errorMessage = Utils.localizedDescription(for: error)
                 }
             }.store(in: &cancellables)
-    }
-    
-    func fetchMovies() {
-        isLoading = true
     }
 }

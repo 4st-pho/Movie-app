@@ -45,6 +45,10 @@ struct HomeView: View {
         }
         .scrollIndicators(.hidden)
         .navigationTitle("FilmKu")
+        .refreshable {
+            viewModel.fetchMovies()
+        }
+        .modifier(LoadingViewModifier(isLoading: $viewModel.isLoading))
     }
 }
 
